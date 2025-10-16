@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SARI Governance Tool - Prototyp</title>
+    <title>Sari Governance Tool</title>
     <style>
         /* Grundlegendes Layout */
         body {
@@ -13,31 +13,77 @@
             padding: 20px;
         }
 
-        h1 {
+        /* Header für Titel und Subtitel */
+        .header {
             text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #005A9C; /* Airbus-Blau */
+        }
+        .header h1 {
+            margin: 0;
             color: #333;
         }
+        .header h2 {
+            margin: 5px 0 0 0;
+            color: #555;
+            font-weight: 400;
+        }
+        
+        /* Obere Übersichts-Timeline */
+        .steps-timeline {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            margin-bottom: 25px;
+            border: 1px solid #ccc;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .step-milestone {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border-right: 1px solid #eee;
+        }
+        .step-milestone:last-child {
+            border-right: none;
+        }
+        .step-milestone .step-title {
+            font-weight: 600;
+            font-size: 1rem;
+            color: #005A9C;
+        }
+        .step-milestone .step-date {
+            font-size: 0.85rem;
+            color: #777;
+            margin-top: 5px;
+        }
+        .step-milestone .step-date.completed {
+            color: green;
+            font-weight: 500;
+        }
 
-        /* Container für die horizontal scrollbare Timeline */
-        .timeline-container {
+        /* Container für die horizontal scrollbaren Detail-Steps */
+        .steps-details-container {
             display: flex;
             overflow-x: auto;
             padding-bottom: 20px;
-            border: 2px solid #005A9C; /* Airbus-Blau */
+            border: 2px solid #005A9C;
             border-radius: 10px;
             background: #ffffff;
         }
 
         /* Einzelner S-Step (auf/zuklappbar) */
         .s-step {
-            flex: 0 0 350px; /* Breite jedes Steps */
+            flex: 0 0 360px; /* Breite jedes Steps */
             margin: 20px;
             border: 1px solid #ccc;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.05);
             transition: all 0.2s ease;
         }
-
         .s-step[open] {
             box-shadow: 0 6px 12px rgba(0,0,0,0.1);
         }
@@ -51,9 +97,8 @@
             background-color: #f9f9f9;
             border-radius: 8px 8px 0 0;
             border-bottom: 1px solid #ccc;
-            outline: none; /* Verhindert blauen Rahmen bei Klick */
+            outline: none; 
         }
-        
         .s-step[open] summary {
             background-color: #005A9C;
             color: white;
@@ -72,14 +117,12 @@
             border: 1px solid #e0e0e0;
             border-radius: 5px;
         }
-
         .deliverable-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 10px;
         }
-
         .deliverable-title {
             font-weight: 500;
             color: #333;
@@ -93,7 +136,6 @@
             border: 2px solid #555;
             box-shadow: inset 0 0 4px rgba(0,0,0,0.2);
         }
-
         .status-light.green { background-color: #28a745; border-color: #1f7d36; }
         .status-light.orange { background-color: #fd7e14; border-color: #c46210; }
         .status-light.red { background-color: #dc3545; border-color: #a72833; }
@@ -101,23 +143,19 @@
         /* Eingabefelder und Templates */
         .deliverable-input {
             width: 100%;
-            box-sizing: border-box; /* Stellt sicher, dass padding die Breite nicht ändert */
+            box-sizing: border-box; 
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-        
-        /* Tooltip für die Hover-Anforderungen */
         .deliverable-input:hover,
         .deliverable-input:focus {
             border-color: #005A9C;
             box-shadow: 0 0 5px rgba(0,90,156,0.3);
             outline: none;
         }
-
-        /* Spezielles Styling für 5-Why/Ishikawa Templates */
         .template-input {
-            height: 200px;
+            height: 150px;
             font-family: monospace;
             font-size: 0.9rem;
             line-height: 1.5;
@@ -127,9 +165,52 @@
 </head>
 <body>
 
-    <h1>SARI Governance Tool (Prototyp)</h1>
+    <div class="header">
+        <h1>Sari Governance Tool</h1>
+        <h2>SARI SE-25.XXXX</h2>
+    </div>
 
-    <div class="timeline-container">
+    <div class="steps-timeline">
+        <div class="step-milestone">
+            <div class="step-title">S0</div>
+            <div class="step-date completed">16.10.2025</div>
+        </div>
+        <div class="step-milestone">
+            <div class="step-title">S1</div>
+            <div class="step-date">Due: 18.10.2025</div>
+        </div>
+        <div class="step-milestone">
+            <div class="step-title">S2</div>
+            <div class="step-date">Due: 20.10.2025</div>
+        </div>
+        <div class="step-milestone">
+            <div class="step-title">S3</div>
+            <div class="step-date">Due: 22.10.2025</div>
+        </div>
+        <div class="step-milestone">
+            <div class="step-title">S4</div>
+            <div class="step-date">Due: 30.10.2025</div>
+        </div>
+        <div class="step-milestone">
+            <div class="step-title">S5</div>
+            <div class="step-date">tbd</div>
+        </div>
+        <div class="step-milestone">
+            <div class="step-title">S6</div>
+            <div class="step-date">tbd</div>
+        </div>
+        <div class="step-milestone">
+            <div class="step-title">S7</div>
+            <div class="step-date">tbd</div>
+        </div>
+        <div class="step-milestone">
+            <div class="step-title">S8</div>
+            <div class="step-date">tbd</div>
+        </div>
+    </div>
+
+
+    <div class="steps-details-container">
 
         <details class="s-step" open>
             <summary>S0: Containment</summary>
@@ -140,18 +221,25 @@
                         <span class="deliverable-title">Kundeninformation</span>
                         <div class="status-light" id="s0-d1-status"></div>
                     </div>
-                    <input type="text" class="deliverable-input" 
-                           placeholder="Nachweis der Kundeninfo (z.B. E-Mail Ref.)"
-                           title="Anforderung (Maturity Grid): Kunde innerhalb von 1-3 Tagen informiert. Benchmark: 1 Tag.">
+                    <input type="date" class="deliverable-input" 
+                           title="Anforderung (Maturity Grid): Kunde muss innerhalb von 1-3 Tagen informiert werden. Benchmark (Grid): 1 Tag.">
                 </div>
 
-                <div class="deliverable-item" data-due-date="2025-10-16" data-id="s0-d2">
+                <div class="deliverable-item" data-due-date="2025-10-17" data-id="s0-d2">
                     <div class="deliverable-header">
                         <span class="deliverable-title">Aktionsplan (Containment)</span>
                         <div class="status-light" id="s0-d2-status"></div>
                     </div>
                     <input type="file" class="deliverable-input" 
                            title="Anforderung (Maturity Grid): 'A formal containment action plan is presented (with action responsible, due date, status)'.">
+                </div>
+                
+                <div class="deliverable-item">
+                     <div class="deliverable-header">
+                        <span class="deliverable-title">Produktion/Lieferung gestoppt?</span>
+                    </div>
+                    <input type="checkbox" id="line-stop" style="margin-left: 5px;">
+                    <label for="line-stop" title="Anforderung (Maturity Grid): 'Supplier Line stopped immediately.'">Ja, gestoppt</label>
                 </div>
 
             </div>
@@ -165,8 +253,8 @@
                         <span class="deliverable-title">MFT & Rollen</span>
                         <div class="status-light" id="s1-d1-status"></div>
                     </div>
-                    <textarea class="deliverable-input" 
-                              placeholder="Leader:&#10;Sponsor:&#10;Operations:&#10;Engineering:&#10;Supplier:"
+                    <textarea class="deliverable-input template-input" 
+                              placeholder="Leader:&#10;Sponsor (Top Mgmt):&#10;Problem Owner (Dept. Mgr):&#10;Operations (Operator):&#10;Engineering:&#10;Supplier (wenn zutr.):"
                               title="Anforderung (Maturity Grid): Leader, Sponsor, Problem Owner, Operations (inkl. Operator) und ggf. Lieferant sind benannt."></textarea>
                 </div>
             </div>
@@ -178,17 +266,17 @@
                 
                 <div class="deliverable-item" data-due-date="2025-10-20" data-id="s2-d1">
                     <div class="deliverable-header">
-                        <span class="deliverable-title">5W2H Analyse</span>
+                        <span class="deliverable-title">5W2H Analyse (Pflicht)</span>
                         <div class="status-light" id="s2-d1-status"></div>
                     </div>
                     <textarea class="deliverable-input template-input" 
-                              placeholder="What:&#10;Where:&#10;When:&#10;Who:&#10;Why:&#10;How:&#10;How much:"
-                              title="Anforderung (Maturity Grid): '5W & 2H or equivalent is used (based on facts & figures, not on perception)'."></textarea>
+                              placeholder="What (1 Object, 1 Defect):&#10;Where:&#10;When:&#10;Who:&#10;Why:&#10;How:&#10;How much:"
+                              title="Anforderung (Maturity Grid): '5W & 2H ... based on facts & figures, not on perception'."></textarea>
                 </div>
 
                 <div class="deliverable-item" data-due-date="2025-10-20" data-id="s2-d2">
                     <div class="deliverable-header">
-                        <span class="deliverable-title">IS / IS NOT Analyse</span>
+                        <span class="deliverable-title">IS / IS NOT (Benchmark)</span>
                         <div class="status-light" id="s2-d2-status"></div>
                     </div>
                     <textarea class="deliverable-input template-input" 
@@ -201,15 +289,22 @@
         
         <details class="s-step">
             <summary>S3: Validate Containment</summary>
-            <div class="deliverables-list">
+             <div class="deliverables-list">
                 <div class="deliverable-item" data-due-date="2025-10-22" data-id="s3-d1">
                     <div class="deliverable-header">
                         <span class="deliverable-title">Validierungsnachweis</span>
                         <div class="status-light" id="s3-d1-status"></div>
                     </div>
-                    <input type="text" class="deliverable-input" 
-                           placeholder="Link zum Validierungs-Test o.ä."
+                    <input type="file" class="deliverable-input" 
                            title="Anforderung (Maturity Grid): 'Effectiveness of containment actions demonstrated... not waiting for customer feedback'. Bsp: 'defective product is returned through the cycle...'.">
+                </div>
+                 <div class="deliverable-item" data-due-date="2025-10-22" data-id="s3-d2">
+                    <div class="deliverable-header">
+                        <span class="deliverable-title">Traceability-Analyse (z.B. TOAC)</span>
+                        <div class="status-light" id="s3-d2-status"></div>
+                    </div>
+                    <input type="file" class="deliverable-input" 
+                           title="Anforderung (Maturity Grid): 'Full traceability secured... Full analysis of WIP/All stocks / In-Service'.">
                 </div>
             </div>
         </details>
@@ -217,47 +312,36 @@
         <details class="s-step" open>
             <summary>S4: Root Cause Analysis</summary>
             <div class="deliverables-list">
-                
+
                 <div class="deliverable-item" data-due-date="2025-10-30" data-id="s4-d1">
                     <div class="deliverable-header">
-                        <span class="deliverable-title">Ishikawa / Brainstorming</span>
+                        <span class="deliverable-title">5-Why (Occurrence)</span>
                         <div class="status-light" id="s4-d1-status"></div>
                     </div>
                     <textarea class="deliverable-input template-input" 
-                              placeholder="Methode:&#10;Material:&#10;Mensch:&#10;Maschine:&#10;Management:&#10;Mitwelt:"
-                              title="Anforderung (Maturity Grid): 'Brainstorm using Ishikawa... to formalize all potential causes'. Wird als 'mandatory tool' bezeichnet."></textarea>
+                              placeholder="Problem (Entstehung):&#10;1. Why? ->&#10;2. Why? ->&#10;3. Why? ->&#10;4. Why? ->&#10;5. Why? -> [Technische RC]"
+                              title="Anforderung (Pflicht): 'Warum ist der Fehler ENTSTANDEN? 5 Whys cascaded until lowest level'."></textarea>
                 </div>
-
+                
                 <div class="deliverable-item" data-due-date="2025-10-30" data-id="s4-d2">
                     <div class="deliverable-header">
-                        <span class="deliverable-title">5-Why (Occurrence)</span>
+                        <span class="deliverable-title">5-Why (Non-Detection)</span>
                         <div class="status-light" id="s4-d2-status"></div>
                     </div>
                     <textarea class="deliverable-input template-input" 
-                              placeholder="Problem:&#10;1. Why? ->&#10;2. Why? ->&#10;3. Why? ->&#10;4. Why? ->&#10;5. Why? -> [Technische RC]"
-                              title="Anforderung (Maturity Grid): '5 Whys cascaded until lowest level'. Muss klar von Non-Detection getrennt sein."></textarea>
+                              placeholder="Problem (Nicht-Entdeckung):&#10;1. Why? ->&#10;2. Why? ->&#10;3. Why? ->&#10;4. Why? ->&#10;5. Why? -> [Non-Detection RC]"
+                              title="Anforderung (Pflicht): 'Warum wurde der Fehler NICHT ENTDECKT? Clear separation between occurrence and non-detection'."></textarea>
                 </div>
                 
                 <div class="deliverable-item" data-due-date="2025-10-30" data-id="s4-d3">
                     <div class="deliverable-header">
-                        <span class="deliverable-title">5-Why (Non-Detection)</span>
-                        <div class="status-light" id="s4-d3-status"></div>
-                    </div>
-                    <textarea class="deliverable-input template-input" 
-                              placeholder="Problem: (Nicht entdeckt)&#10;1. Why? ->&#10;2. Why? ->&#10;3. Why? ->&#10;4. Why? ->&#10;5. Why? -> [Non-Detection RC]"
-                              title="Anforderung (Maturity Grid): 'Clear separation between RCA for the occurrence and for the non-detection'."></textarea>
-                </div>
-                
-                <div class="deliverable-item" data-due-date="2025-10-30" data-id="s4-d4">
-                    <div class="deliverable-header">
                         <span class="deliverable-title">Systemische Ursache</span>
-                        <div class="status-light" id="s4-d4-status"></div>
+                        <div class="status-light" id="s4-d3-status"></div>
                     </div>
                      <input type="text" class="deliverable-input" 
                            placeholder="Systemische / Management-Ursache"
-                           title="Anforderung (Maturity Grid): 'Systemic / management root cause(s) identified'.">
+                           title="Anforderung (Pflicht): 'Systemic / management root cause(s) identified'. Was im System (Prozess, Training, Standard) hat dies zugelassen?">
                 </div>
-
             </div>
         </details>
         
@@ -305,7 +389,7 @@
                 }
             });
         });
-    </style>
+    </Fscript>
 
 </body>
 </html>
