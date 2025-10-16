@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SARI Governance Tool - Prototyp</title>
+    <style>
+        /* Grundlegendes Layout */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        /* Container für die horizontal scrollbare Timeline */
+        .timeline-container {
+            display: flex;
+            overflow-x: auto;
+            padding-bottom: 20px;
+            border: 2px solid #005A9C; /* Airbus-Blau */
+            border-radius: 10px;
+            background: #ffffff;
+        }
+
+        /* Einzelner S-Step (auf/zuklappbar) */
+        .s-step {
+            flex: 0 0 350px; /* Breite jedes Steps */
+            margin: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+        }
+
+        .s-step[open] {
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+
+        /* Sichtbarer Teil des S-Steps */
+        .s-step summary {
+            font-size: 1.25rem;
+            font-weight: 600;
+            padding: 15px;
+            cursor: pointer;
+            background-color: #f9f9f9;
+            border-radius: 8px 8px 0 0;
+            border-bottom: 1px solid #ccc;
+            outline: none; /* Verhindert blauen Rahmen bei Klick */
+        }
+        
+        .s-step[open] summary {
+            background-color: #005A9C;
+            color: white;
+        }
+
+        /* Container für die Deliverables */
+        .deliverables-list {
+            padding: 15px;
+        }
+
+        /* Einzelnes Deliverable-Item */
+        .deliverable-item {
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+        }
+
+        .deliverable-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .deliverable-title {
+            font-weight: 500;
+            color: #333;
+        }
+
+        /* Ampel-Logik */
+        .status-light {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid #555;
+            box-shadow: inset 0 0 4px rgba(0,0,0,0.2);
+        }
+
+        .status-light.green { background-color: #28a745; border-color: #1f7d36; }
+        .status-light.orange { background-color: #fd7e14; border-color: #c46210; }
+        .status-light.red { background-color: #dc3545; border-color: #a72833; }
+
+        /* Eingabefelder und Templates */
+        .deliverable-input {
+            width: 100%;
+            box-sizing: border-box; /* Stellt sicher, dass padding die Breite nicht ändert */
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        
+        /* Tooltip für die Hover-Anforderungen */
+        .deliverable-input:hover,
+        .deliverable-input:focus {
+            border-color: #005A9C;
+            box-shadow: 0 0 5px rgba(0,90,156,0.3);
+            outline: none;
+        }
+
+        /* Spezielles Styling für 5-Why/Ishikawa Templates */
+        .template-input {
+            height: 200px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>SARI Governance Tool (Prototyp)</h1>
+
+    <div class="timeline-container">
+
+        <details class="s-step" open>
+            <summary>S0: Containment</summary>
+            <div class="deliverables-list">
+                
+                <div class="deliverable-item" data-due-date="2025-10-17" data-id="s0-d1">
+                    <div class="deliverable-header">
+                        <span class="deliverable-title">Kundeninformation</span>
+                        <div class="status-light" id="s0-d1-status"></div>
+                    </div>
+                    <input type="text" class="deliverable-input" 
+                           placeholder="Nachweis der Kundeninfo (z.B. E-Mail Ref.)"
+                           title="Anforderung (Maturity Grid): Kunde innerhalb von 1-3 Tagen informiert. Benchmark: 1 Tag.">
+                </div>
+
+                <div class="deliverable-item" data-due-date="2025-10-16" data-id="s0-d2">
+                    <div class="deliverable-header">
+                        <span class="deliverable-title">Aktionsplan (Containment)</span>
+                        <div class="status-light" id="s0-d2-status"></div>
+                    </div>
+                    <input type="file" class="deliverable-input" 
+                           title="Anforderung (Maturity Grid): 'A formal containment action plan is presented (with action responsible, due date, status)'.">
+                </div>
+
+            </div>
+        </details>
+
+        <details class="s-step">
+            <summary>S1: Team</summary>
+            <div class="deliverables-list">
+                <div class="deliverable-item" data-due-date="2025-10-18" data-id="s1-d1">
+                    <div class="deliverable-header">
+                        <span class="deliverable-title">MFT & Rollen</span>
+                        <div class="status-light" id="s1-d1-status"></div>
+                    </div>
+                    <textarea class="deliverable-input" 
+                              placeholder="Leader:&#10;Sponsor:&#10;Operations:&#10;Engineering:&#10;Supplier:"
+                              title="Anforderung (Maturity Grid): Leader, Sponsor, Problem Owner, Operations (inkl. Operator) und ggf. Lieferant sind benannt."></textarea>
+                </div>
+            </div>
+        </details>
+
+        <details class="s-step" open>
+            <summary>S2: Problem Definition</summary>
+            <div class="deliverables-list">
+                
+                <div class="deliverable-item" data-due-date="2025-10-20" data-id="s2-d1">
+                    <div class="deliverable-header">
+                        <span class="deliverable-title">5W2H Analyse</span>
+                        <div class="status-light" id="s2-d1-status"></div>
+                    </div>
+                    <textarea class="deliverable-input template-input" 
+                              placeholder="What:&#10;Where:&#10;When:&#10;Who:&#10;Why:&#10;How:&#10;How much:"
+                              title="Anforderung (Maturity Grid): '5W & 2H or equivalent is used (based on facts & figures, not on perception)'."></textarea>
+                </div>
+
+                <div class="deliverable-item" data-due-date="2025-10-20" data-id="s2-d2">
+                    <div class="deliverable-header">
+                        <span class="deliverable-title">IS / IS NOT Analyse</span>
+                        <div class="status-light" id="s2-d2-status"></div>
+                    </div>
+                    <textarea class="deliverable-input template-input" 
+                              placeholder="IS:&#10;...&#10;---&#10;IS NOT:&#10;..."
+                              title="Anforderung (Maturity Grid 'Benchmark'): 'IS / IS NOT to describe the problem when complex'."></textarea>
+                </div>
+
+            </div>
+        </details>
+        
+        <details class="s-step">
+            <summary>S3: Validate Containment</summary>
+            <div class="deliverables-list">
+                <div class="deliverable-item" data-due-date="2025-10-22" data-id="s3-d1">
+                    <div class="deliverable-header">
+                        <span class="deliverable-title">Validierungsnachweis</span>
+                        <div class="status-light" id="s3-d1-status"></div>
+                    </div>
+                    <input type="text" class="deliverable-input" 
+                           placeholder="Link zum Validierungs-Test o.ä."
+                           title="Anforderung (Maturity Grid): 'Effectiveness of containment actions demonstrated... not waiting for customer feedback'. Bsp: 'defective product is returned through the cycle...'.">
+                </div>
+            </div>
+        </details>
+
+        <details class="s-step" open>
+            <summary>S4: Root Cause Analysis</summary>
+            <div class="deliverables-list">
+                
+                <div class="deliverable-item" data-due-date="2025-10-30" data-id="s4-d1">
+                    <div class="deliverable-header">
+                        <span class="deliverable-title">Ishikawa / Brainstorming</span>
+                        <div class="status-light" id="s4-d1-status"></div>
+                    </div>
+                    <textarea class="deliverable-input template-input" 
+                              placeholder="Methode:&#10;Material:&#10;Mensch:&#10;Maschine:&#10;Management:&#10;Mitwelt:"
+                              title="Anforderung (Maturity Grid): 'Brainstorm using Ishikawa... to formalize all potential causes'. Wird als 'mandatory tool' bezeichnet."></textarea>
+                </div>
+
+                <div class="deliverable-item" data-due-date="2025-10-30" data-id="s4-d2">
+                    <div class="deliverable-header">
+                        <span class="deliverable-title">5-Why (Occurrence)</span>
+                        <div class="status-light" id="s4-d2-status"></div>
+                    </div>
+                    <textarea class="deliverable-input template-input" 
+                              placeholder="Problem:&#10;1. Why? ->&#10;2. Why? ->&#10;3. Why? ->&#10;4. Why? ->&#10;5. Why? -> [Technische RC]"
+                              title="Anforderung (Maturity Grid): '5 Whys cascaded until lowest level'. Muss klar von Non-Detection getrennt sein."></textarea>
+                </div>
+                
+                <div class="deliverable-item" data-due-date="2025-10-30" data-id="s4-d3">
+                    <div class="deliverable-header">
+                        <span class="deliverable-title">5-Why (Non-Detection)</span>
+                        <div class="status-light" id="s4-d3-status"></div>
+                    </div>
+                    <textarea class="deliverable-input template-input" 
+                              placeholder="Problem: (Nicht entdeckt)&#10;1. Why? ->&#10;2. Why? ->&#10;3. Why? ->&#10;4. Why? ->&#10;5. Why? -> [Non-Detection RC]"
+                              title="Anforderung (Maturity Grid): 'Clear separation between RCA for the occurrence and for the non-detection'."></textarea>
+                </div>
+                
+                <div class="deliverable-item" data-due-date="2025-10-30" data-id="s4-d4">
+                    <div class="deliverable-header">
+                        <span class="deliverable-title">Systemische Ursache</span>
+                        <div class="status-light" id="s4-d4-status"></div>
+                    </div>
+                     <input type="text" class="deliverable-input" 
+                           placeholder="Systemische / Management-Ursache"
+                           title="Anforderung (Maturity Grid): 'Systemic / management root cause(s) identified'.">
+                </div>
+
+            </div>
+        </details>
+        
+        </div>
+
+    <script>
+        // JavaScript für die Ampel-Logik
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Konfiguration: Wie viele Tage vor Due Date auf 'at risk' (orange) schalten?
+            const AT_RISK_DAYS = 3; 
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // Ignoriere die Uhrzeit für den Vergleich
+
+            const allDeliverables = document.querySelectorAll('.deliverable-item');
+
+            allDeliverables.forEach(item => {
+                const dueDateString = item.dataset.dueDate;
+                if (!dueDateString) return;
+
+                const dueDate = new Date(dueDateString);
+                dueDate.setHours(0, 0, 0, 0); // Ignoriere Uhrzeit
+
+                const statusLight = document.getElementById(item.dataset.id + '-status');
+                if (!statusLight) return;
+
+                // Berechne die Differenz in Tagen
+                const diffTime = dueDate.getTime() - today.getTime();
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                // Logik für Ampel
+                if (diffTime < 0) {
+                    // Überfällig
+                    statusLight.classList.add('red');
+                    statusLight.title = `Status: Not On Time (Fällig am ${dueDateString})`;
+                } else if (diffDays <= AT_RISK_DAYS) {
+                    // Bald fällig
+                    statusLight.classList.add('orange');
+                    statusLight.title = `Status: At Risk (Fällig in ${diffDays} Tagen)`;
+                } else {
+                    // Im Zeitplan
+                    statusLight.classList.add('green');
+                    statusLight.title = `Status: On Time (Fällig in ${diffDays} Tagen)`;
+                }
+            });
+        });
+    </style>
+
+</body>
+</html>
