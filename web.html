@@ -131,9 +131,9 @@
         <div class="step-milestone" id="timeline-s3"><div class="step-title">S3</div><div class="step-date"></div></div>
         <div class="step-milestone" id="timeline-s4"><div class="step-title">S4</div><div class="step-date"></div></div>
         <div class="step-milestone" id="timeline-s5"><div class="step-title">S5</div><div class="step-date"></div></div>
-        <div class="step-milestone gate" id="timeline-dryrun"><div class="step-title">Dry Run</div><div class="step-date"></div></div>
-        <div class="step-milestone" id="timeline-s6"><div class="step-title">S6</div><div class="step-date"></div></div>
         <div class="step-milestone gate" id="timeline-pp"><div class="step-title">PP</div><div class="step-date"></div></div>
+        <div class="step-milestone" id="timeline-s6"><div class="step-title">S6</div><div class="step-date"></div></div>
+        <div class="step-milestone gate" id="timeline-dryrun"><div class="step-title">Dry Run</div><div class="step-date"></div></div>
         <div class="step-milestone" id="timeline-s7"><div class="step-title">S7</div><div class="step-date"></div></div>
         <div class="step-milestone" id="timeline-s8"><div class="step-title">S8</div><div class="step-date"></div></div>
     </div>
@@ -143,6 +143,7 @@
         <!-- S0 -->
         <details class="s-step" open><summary data-info-title="S0: Ziel" data-info-text="Ziel ist die sofortige Eindämmung des Problems, um den Kunden zu schützen, und eine transparente Erstinformation. Geschwindigkeit ist hier der entscheidende Faktor."><span>S0: Containment</span><button class="info-btn">?</button></summary><div class="deliverables-list">
             <div class="deliverable-item" data-due-days="1" data-id="s0-d1" data-info-title="Nachweis (Kundeninformation)" data-info-text="Gemäß Maturity Grid (Benchmark) muss der Kunde innerhalb von 1 Tag informiert werden."><div class="deliverable-header"><span class="deliverable-title">Nachweis (Kundeninfo)</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s0-d1-status"></div></div></div><input type="date" class="deliverable-input"></div>
+            <div class="deliverable-item" data-due-days="1" data-id="s0-d2" data-info-title="Containment-Aktionsplan" data-info-text="Anforderung (Grid): 'A formal containment action plan is presented (with action responsible, due date, status)'."><div class="deliverable-header"><span class="deliverable-title">Containment-Aktionsplan</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s0-d2-status"></div></div></div><input type="file" class="deliverable-input"></div>
         </div></details>
 
         <!-- S1 -->
@@ -157,6 +158,11 @@
             <div class="deliverable-item" data-due-days="5" data-id="s2-d3" data-info-title="Foto-/Videobeweis" data-info-text="Visueller Nachweis des Problems. Dies ist entscheidend für die 'Go Look See'-Anforderung."><div class="deliverable-header"><span class="deliverable-title">Foto-/Videobeweis</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s2-d3-status"></div></div></div><input type="file" class="deliverable-input" id="image-upload" accept="image/*"><img id="image-preview" src="#" alt="Bildvorschau"/></div>
         </div></details>
         
+        <!-- S3 -->
+        <details class="s-step"><summary data-info-title="S3: Ziel" data-info-text="Ziel ist der *Beweis*, dass die in S0 definierten Sofortmaßnahmen zu 100% wirksam sind, bevor die eigentliche Ursachenanalyse beginnt."><span>S3: Validate Containment</span><button class="info-btn">?</button></summary><div class="deliverables-list">
+            <div class="deliverable-item" data-due-days="7" data-id="s3-d1" data-info-title="Validierungsbericht" data-info-text="Das Grid verlangt den *Beweis*, dass die Eindämmung funktioniert, *bevor* man auf Kundenfeedback wartet. Beispiel (Grid): 'defective product is returned through the cycle to ensure that it is captured in 100% of cases'."><div class="deliverable-header"><span class="deliverable-title">Validierungsbericht</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s3-d1-status"></div></div></div><input type="file" class="deliverable-input"></div>
+        </div></details>
+
         <!-- S4 -->
         <details class="s-step" open><summary data-info-title="S4: Ziel" data-info-text="Ziel ist die systematische und getrennte Identifikation aller Ursachenebenen: Wie ist es entstanden (Occurrence)? Warum wurde es nicht entdeckt (Non-Detection)? Und was im System hat beides zugelassen (Systemic)?"><span>S4: Root Cause Analysis</span><button class="info-btn">?</button></summary><div class="deliverables-list">
             <div class="deliverable-item" data-due-days="20" data-id="s4-d1" data-info-title="Ishikawa (Brainstorming)" data-info-text="Das Grid fordert: 'Brainstorm using Ishikawa... to formalize all potential causes'."><div class="deliverable-header"><span class="deliverable-title">Ishikawa</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s4-d1-status"></div></div></div><div class="ishikawa-diagram"><div class="ishikawa-bone"><h4>Mensch</h4><textarea></textarea></div><div class="ishikawa-bone"><h4>Maschine</h4><textarea></textarea></div><div class="ishikawa-bone"><h4>Material</h4><textarea></textarea></div><div class="ishikawa-bone"><h4>Methode</h4><textarea></textarea></div><div class="ishikawa-bone"><h4>Management</h4><textarea></textarea></div><div class="ishikawa-bone"><h4>Mitwelt</h4><textarea></textarea></div></div></div>
@@ -173,6 +179,22 @@
                 <div class="rca-pca-link"><div class="rc-title">Maßnahmen für RC 3 (Systemic):</div><textarea class="deliverable-input" placeholder="PCA 3.1..."></textarea></div>
             </div>
         </div></details>
+        
+        <!-- S6 -->
+        <details class="s-step"><summary data-info-title="S6: Ziel" data-info-text="Ziel ist die vollständige Implementierung der in S5 definierten Maßnahmen und der statistische Nachweis ihrer Wirksamkeit über einen festgelegten Zeitraum."><span>S6: Implement Actions</span><button class="info-btn">?</button></summary><div class="deliverables-list">
+             <div class="deliverable-item" data-due-days="90" data-id="s6-d1" data-info-title="Effektivitäts-Validierung" data-info-text="Statistischer Nachweis über einen definierten Zeitraum (z.B. SPC-Chart), dass die Aktionen das Problem dauerhaft gelöst haben."><div class="deliverable-header"><span class="deliverable-title">Effektivitäts-Validierung</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s6-d1-status"></div></div></div><input type="file" class="deliverable-input"></div>
+        </div></details>
+
+        <!-- S7 -->
+        <details class="s-step"><summary data-info-title="S7: Ziel" data-info-text="Ziel ist die Standardisierung der Lösung, um ein Wiederauftreten des Problems an anderer Stelle zu verhindern (Prävention). Dies beinhaltet die Aktualisierung von Prozessen und den Transfer des Wissens."><span>S7: Standardize</span><button class="info-btn">?</button></summary><div class="deliverables-list">
+            <div class="deliverable-item" data-due-days="110" data-id="s7-d1" data-info-title="'Look Across'-Bericht" data-info-text="Bericht, der dokumentiert, welche anderen Produkte, Linien, Werke geprüft wurden."><div class="deliverable-header"><span class="deliverable-title">'Look Across'-Bericht</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s7-d1-status"></div></div></div><input type="file" class="deliverable-input"></div>
+        </div></details>
+        
+        <!-- S8 -->
+        <details class="s-step"><summary data-info-title="S8: Ziel" data-info-text="Ziel ist der formale Abschluss der Untersuchung, die Kommunikation des Erfolgs an alle Stakeholder und die Würdigung der Teamleistung."><span>S8: Close</span><button class="info-btn">?</button></summary><div class="deliverables-list">
+            <div class="deliverable-item" data-due-days="120" data-id="s8-d1" data-info-title="9S-Abschluss-Checkliste" data-info-text="Eine interne Checkliste, die bestätigt, dass alle Deliverables von S0-S7 vorhanden und validiert sind."><div class="deliverable-header"><span class="deliverable-title">Abschluss-Checkliste</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s8-d1-status"></div></div></div><input type="file" class="deliverable-input"></div>
+        </div></details>
+
     </div>
 
     <script>
@@ -200,8 +222,8 @@
             const setupTimeline = () => {
                 const milestones = [
                     { id: 's0', due: 1 }, { id: 's1', due: 2 }, { id: 's2', due: 5 }, { id: 's3', due: 7 }, 
-                    { id: 's4', due: 20 }, { id: 's5', due: 30 }, { id: 'dryrun', due: 60 }, 
-                    { id: 's6', due: 90 }, { id: 'pp', due: 100 }, { id: 's7', due: 110 }, { id: 's8', due: 120 }
+                    { id: 's4', due: 20 }, { id: 's5', due: 30 }, { id: 'pp', due: 40 }, 
+                    { id: 's6', due: 90 }, { id: 'dryrun', due: 100 }, { id: 's7', due: 110 }, { id: 's8', due: 120 }
                 ];
                 milestones.forEach(m => {
                     const el = document.getElementById(`timeline-${m.id}`);
