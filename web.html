@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sari Governance Tool</title>
+    <style>
+        :root {
+            --airbus-blue: #005A9C;
+            --light-blue: #e6f0f7;
+            --gate-grey: #e5e7eb;
+            --text-dark: #333;
+            --text-light: #555;
+            --border-color: #d1d5db;
+            --status-green: #28a745;
+            --status-orange: #fd7e14;
+            --status-red: #dc3545;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 24px;
+            color: var(--text-dark);
+        }
+
+        /* --- Header & Dashboard --- */
+        .header { text-align: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid var(--airbus-blue); }
+        .header h1 { margin: 0; }
+        .header h2 { margin: 5px 0 0 0; color: var(--text-light); font-weight: 400; }
+
+        .project-health { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-bottom: 24px; padding: 16px; background: #fff; border-radius: 8px; box-shadow: var(--shadow-md); }
+        .kpi-card { text-align: center; padding: 8px; }
+        .kpi-card .kpi-title { font-size: 0.9rem; color: var(--text-light); }
+        .kpi-card .kpi-value { font-size: 1.5rem; font-weight: 600; color: var(--airbus-blue); margin-top: 4px; }
+        .kpi-card .kpi-value.red { color: var(--status-red); }
+        .kpi-card .kpi-value.orange { color: var(--status-orange); }
+        .kpi-card .kpi-value.green { color: var(--status-green); }
+
+
+        /* --- Obere Übersichts-Timeline --- */
+        .steps-timeline { display: flex; justify-content: space-between; padding: 10px 0; margin-bottom: 24px; border: 1px solid var(--border-color); background: #fff; border-radius: 8px; box-shadow: var(--shadow-sm); }
+        .step-milestone { flex-basis: 9%; text-align: center; padding: 10px 5px; border-right: 1px solid #eee; position: relative; transition: background-color 0.3s; }
+        .step-milestone:last-child { border-right: none; }
+        .step-milestone .step-title { font-weight: 600; font-size: 0.9rem; color: var(--airbus-blue); }
+        .step-milestone .step-date { font-size: 0.8rem; color: #777; margin-top: 5px; }
+        .step-milestone.gate { background: var(--gate-grey); }
+        .step-milestone.gate .step-title { color: var(--text-dark); }
+        .step-milestone.current-step { background-color: var(--light-blue); border-bottom: 3px solid var(--airbus-blue); }
+
+        /* --- Haupt-Container (scrollbar) --- */
+        .steps-details-container { display: flex; overflow-x: auto; padding: 10px 0 20px 0; border: 2px solid var(--airbus-blue); border-radius: 10px; background: #ffffff; box-shadow: var(--shadow-md); }
+
+        /* --- S-Step (klappbar) --- */
+        .s-step { flex: 0 0 420px; margin: 20px; border: 1px solid var(--border-color); border-radius: 8px; box-shadow: var(--shadow-sm); transition: all 0.2s ease; }
+        .s-step[open] { box-shadow: var(--shadow-md); }
+        .s-step summary { display: flex; justify-content: space-between; align-items: center; font-size: 1.25rem; font-weight: 600; padding: 15px; cursor: pointer; background-color: #f9f9f9; border-radius: 8px 8px 0 0; border-bottom: 1px solid var(--border-color); outline: none; }
+        .s-step[open] summary { background-color: var(--airbus-blue); color: white; }
+        .s-step summary .info-btn { color: var(--airbus-blue); background: var(--light-blue); }
+        .s-step[open] summary .info-btn { color: white; background: rgba(255,255,255,0.2); border-color: white; }
+        .deliverables-list { padding: 16px; }
+
+        /* --- Deliverable-Item --- */
+        .deliverable-item { margin-bottom: 20px; padding: 12px; background: #fdfdfd; border: 1px solid #e0e0e0; border-radius: 5px; }
+        .deliverable-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .deliverable-title { font-weight: 500; }
+        .header-controls { display: flex; align-items: center; gap: 10px; }
+        .info-btn { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--airbus-blue); background: var(--light-blue); color: var(--airbus-blue); font-weight: 700; font-size: 1rem; cursor: pointer; padding: 0; line-height: 22px; flex-shrink: 0;}
+        .info-btn:hover { background: var(--airbus-blue); color: white; }
+        .reminder-btn { border: none; background: none; cursor: pointer; padding: 0; display: none; }
+        .reminder-btn svg { width: 20px; height: 20px; fill: var(--text-light); }
+        .reminder-btn:hover svg { fill: var(--airbus-blue); }
+
+        .status-light { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #555; box-shadow: inset 0 0 4px rgba(0,0,0,0.2); flex-shrink: 0;}
+        .status-light.green { background-color: var(--status-green); border-color: #1f7d36; }
+        .status-light.orange { background-color: var(--status-orange); border-color: #c46210; }
+        .status-light.red { background-color: var(--status-red); border-color: #a72833; }
+
+        .deliverable-input { width: 100%; box-sizing: border-box; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; margin-top: 4px; }
+        .deliverable-input:focus { border-color: var(--airbus-blue); box-shadow: 0 0 5px rgba(0,90,156,0.3); outline: none; }
+        
+        #image-preview { max-width: 100%; height: auto; margin-top: 10px; border-radius: 4px; border: 1px solid var(--border-color); display: none; }
+        
+        /* --- Spezifische Templates --- */
+        .supply-chain-breakdown { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
+        .sc-node { flex: 1; text-align: center; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; background: #fafafa; }
+        .sc-arrow { margin: 0 8px; font-size: 1.5rem; color: var(--text-light); }
+        
+        .suggestion-box { margin-top: 10px; padding: 10px; background-color: var(--light-blue); border: 1px solid var(--airbus-blue); border-radius: 4px; font-style: italic; color: var(--text-dark); }
+        
+        .rca-pca-link { margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 15px; }
+        .rca-pca-link .rc-title { font-weight: 600; }
+
+        .ishikawa-diagram { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; border-right: 4px solid var(--airbus-blue); padding: 10px; background: #fdfdfd; }
+        .ishikawa-bone h4 { margin: 0 0 10px 0; padding-bottom: 5px; border-bottom: 1px solid var(--airbus-blue); color: var(--airbus-blue); }
+        .ishikawa-bone textarea { width: 100%; height: 60px; box-sizing: border-box; border: 1px solid #ddd; font-family: monospace; font-size: 0.85rem; }
+
+        /* --- Modal --- */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); animation: fadeIn 0.3s; }
+        .modal-content { background-color: #fefefe; margin: 10% auto; padding: 24px; border: 1px solid #888; border-radius: 8px; width: 90%; max-width: 600px; box-shadow: var(--shadow-md); animation: slideIn 0.3s; }
+        @keyframes fadeIn { from {opacity: 0} to {opacity: 1} }
+        @keyframes slideIn { from {transform: translateY(-50px)} to {transform: translateY(0)} }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 12px; margin-bottom: 16px; }
+        .modal-header h3 { margin: 0; color: var(--airbus-blue); }
+        .modal-close-btn { color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .modal-close-btn:hover { color: black; }
+        .modal-body { line-height: 1.6; }
+        .modal-body ul { margin-top: 10px; padding-left: 20px; }
+    </style>
+</head>
+<body>
+
+    <div id="info-modal" class="modal"><div class="modal-content"><div class="modal-header"><h3 id="modal-title"></h3><span class="modal-close-btn" id="modal-close">&times;</span></div><div id="modal-body" class="modal-body"></div></div></div>
+
+    <div class="header"><h1>Sari Governance Tool</h1><h2>SARI SE-25.XXXX</h2></div>
+
+    <div class="project-health">
+        <div class="kpi-card"><div class="kpi-title">Overall Status</div><div class="kpi-value" id="kpi-status">On Time</div></div>
+        <div class="kpi-card"><div class="kpi-title">Days Open</div><div class="kpi-value" id="kpi-days-open">0</div></div>
+        <div class="kpi-card"><div class="kpi-title">Current Step</div><div class="kpi-value" id="kpi-current-step">S0</div></div>
+        <div class="kpi-card"><div class="kpi-title">Next Milestone</div><div class="kpi-value" id="kpi-next-milestone">S0 Due</div></div>
+    </div>
+
+    <div class="steps-timeline">
+        <div class="step-milestone" id="timeline-s0"><div class="step-title">S0</div><div class="step-date"></div></div>
+        <div class="step-milestone" id="timeline-s1"><div class="step-title">S1</div><div class="step-date"></div></div>
+        <div class="step-milestone" id="timeline-s2"><div class="step-title">S2</div><div class="step-date"></div></div>
+        <div class="step-milestone" id="timeline-s3"><div class="step-title">S3</div><div class="step-date"></div></div>
+        <div class="step-milestone" id="timeline-s4"><div class="step-title">S4</div><div class="step-date"></div></div>
+        <div class="step-milestone" id="timeline-s5"><div class="step-title">S5</div><div class="step-date"></div></div>
+        <div class="step-milestone gate" id="timeline-dryrun"><div class="step-title">Dry Run</div><div class="step-date"></div></div>
+        <div class="step-milestone" id="timeline-s6"><div class="step-title">S6</div><div class="step-date"></div></div>
+        <div class="step-milestone gate" id="timeline-pp"><div class="step-title">PP</div><div class="step-date"></div></div>
+        <div class="step-milestone" id="timeline-s7"><div class="step-title">S7</div><div class="step-date"></div></div>
+        <div class="step-milestone" id="timeline-s8"><div class="step-title">S8</div><div class="step-date"></div></div>
+    </div>
+
+    <div class="steps-details-container">
+
+        <!-- S0 -->
+        <details class="s-step" open><summary data-info-title="S0: Ziel" data-info-text="Ziel ist die sofortige Eindämmung des Problems, um den Kunden zu schützen, und eine transparente Erstinformation. Geschwindigkeit ist hier der entscheidende Faktor."><span>S0: Containment</span><button class="info-btn">?</button></summary><div class="deliverables-list">
+            <div class="deliverable-item" data-due-days="1" data-id="s0-d1" data-info-title="Nachweis (Kundeninformation)" data-info-text="Gemäß Maturity Grid (Benchmark) muss der Kunde innerhalb von 1 Tag informiert werden."><div class="deliverable-header"><span class="deliverable-title">Nachweis (Kundeninfo)</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s0-d1-status"></div></div></div><input type="date" class="deliverable-input"></div>
+        </div></details>
+
+        <!-- S1 -->
+        <details class="s-step"><summary data-info-title="S1: Ziel" data-info-text="Ziel ist die Etablierung eines kompetenten, funktionsübergreifenden Teams (MFT) mit klarem Management-Mandat ('Sponsor'), um eine effektive Untersuchung sicherzustellen."><span >S1: Team</span><button class="info-btn">?</button></summary><div class="deliverables-list">
+            <div class="deliverable-item" data-due-days="2" data-id="s1-d1" data-info-title="Team Charter (MFT)" data-info-text="Das Grid fordert ein vollständiges MFT. Pflichtrollen:<ul><li><b>Leader</b></li><li><b>Sponsor (Top Mgmt)</b></li><li><b>Problem Owner</b></li><li><b>Operations (Operator/Inspector)</b></li></ul>"><div class="deliverable-header"><span class="deliverable-title">Team Charter (MFT)</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s1-d1-status"></div></div></div><textarea class="deliverable-input" style="height: 120px;" placeholder="Leader:&#10;Sponsor:&#10;Problem Owner:&#10;Operations:"></textarea></div>
+        </div></details>
+        
+        <!-- S2 -->
+        <details class="s-step" open><summary data-info-title="S2: Ziel" data-info-text="Ziel ist es, eine unmissverständliche, faktenbasierte Problembeschreibung zu erstellen. Verlassen Sie die Ebene der Vermutungen und sammeln Sie harte Beweise ('Go Look See') und den vollständigen Kontext."><span>S2: Evidence Hub</span><button class="info-btn">?</button></summary><div class="deliverables-list">
+            <div class="deliverable-item" data-due-days="5" data-id="s2-d1" data-info-title="Supply Chain Breakdown" data-info-text="Visualisieren Sie den Weg des betroffenen Teils, um den Kontext und die Schnittstellen sofort verständlich zu machen."><div class="deliverable-header"><span class="deliverable-title">Supply Chain Breakdown</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s2-d1-status"></div></div></div><div class="supply-chain-breakdown"><div class="sc-node">Tier 1</div><div class="sc-arrow">&rarr;</div><div class="sc-node">Airbus Plant</div><div class="sc-arrow">&rarr;</div><div class="sc-node">FAL</div></div></div>
+            <div class="deliverable-item" data-due-days="5" data-id="s2-d2" data-info-title="Issue Description" data-info-text="Beschreiben Sie das Problem präzise. Basierend auf Ihren Schlüsselwörtern schlägt das Tool ein M1750 GEN Kriterium vor."><div class="deliverable-header"><span class="deliverable-title">Issue Description</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s2-d2-status"></div></div></div><textarea id="issue-description-input" class="deliverable-input" style="height: 100px;" placeholder="z.B. FOD (Schraube) im Bereich... gefunden"></textarea><div class="suggestion-box" id="suggestion-output">Vorschlag M1750 Kriterium: -</div></div>
+            <div class="deliverable-item" data-due-days="5" data-id="s2-d3" data-info-title="Foto-/Videobeweis" data-info-text="Visueller Nachweis des Problems. Dies ist entscheidend für die 'Go Look See'-Anforderung."><div class="deliverable-header"><span class="deliverable-title">Foto-/Videobeweis</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s2-d3-status"></div></div></div><input type="file" class="deliverable-input" id="image-upload" accept="image/*"><img id="image-preview" src="#" alt="Bildvorschau"/></div>
+        </div></details>
+        
+        <!-- S4 -->
+        <details class="s-step" open><summary data-info-title="S4: Ziel" data-info-text="Ziel ist die systematische und getrennte Identifikation aller Ursachenebenen: Wie ist es entstanden (Occurrence)? Warum wurde es nicht entdeckt (Non-Detection)? Und was im System hat beides zugelassen (Systemic)?"><span>S4: Root Cause Analysis</span><button class="info-btn">?</button></summary><div class="deliverables-list">
+            <div class="deliverable-item" data-due-days="20" data-id="s4-d1" data-info-title="Ishikawa (Brainstorming)" data-info-text="Das Grid fordert: 'Brainstorm using Ishikawa... to formalize all potential causes'."><div class="deliverable-header"><span class="deliverable-title">Ishikawa</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s4-d1-status"></div></div></div><div class="ishikawa-diagram"><div class="ishikawa-bone"><h4>Mensch</h4><textarea></textarea></div><div class="ishikawa-bone"><h4>Maschine</h4><textarea></textarea></div><div class="ishikawa-bone"><h4>Material</h4><textarea></textarea></div><div class="ishikawa-bone"><h4>Methode</h4><textarea></textarea></div><div class="ishikawa-bone"><h4>Management</h4><textarea></textarea></div><div class="ishikawa-bone"><h4>Mitwelt</h4><textarea></textarea></div></div></div>
+            <div class="deliverable-item" data-due-days="20" data-id="s4-d2" data-info-title="Root Cause 1: Occurrence" data-info-text="Pfad 1: Warum ist der Fehler *ENTSTANDEN*?"><div class="deliverable-header"><span class="deliverable-title">RC 1: Occurrence</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s4-d2-status"></div></div></div><input id="rc1-input" class="deliverable-input" placeholder="Tiefste technische Ursache..."></div>
+            <div class="deliverable-item" data-due-days="20" data-id="s4-d3" data-info-title="Root Cause 2: Non-Detection" data-info-text="Pfad 2: Warum wurde der Fehler *NICHT ENTDECKT*?"><div class="deliverable-header"><span class="deliverable-title">RC 2: Non-Detection</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s4-d3-status"></div></div></div><input id="rc2-input" class="deliverable-input" placeholder="Ursache im Quality Gate..."></div>
+            <div class="deliverable-item" data-due-days="20" data-id="s4-d4" data-info-title="Root Cause 3: Systemic" data-info-text="Pfad 3: Was im System (Prozess, Training, Standard) hat dies zugelassen?"><div class="deliverable-header"><span class="deliverable-title">RC 3: Systemic</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s4-d4-status"></div></div></div><input id="rc3-input" class="deliverable-input" placeholder="Systemische / Management-Ursache..."></div>
+        </div></details>
+
+        <!-- S5 -->
+        <details class="s-step"><summary data-info-title="S5: Ziel" data-info-text="Ziel ist die Definition von wirksamen Korrekturmaßnahmen (PCAs), die JEDE in S4 identifizierte Ursachenebene adressieren."><span>S5: Define Actions</span><button class="info-btn">?</button></summary><div class="deliverables-list">
+            <div class="deliverable-item" data-due-days="30" data-id="s5-d1" data-info-title="PCA-Aktionsplan" data-info-text="Der Plan muss klar in Aktionen gegen 1) Occurrence, 2) Non-Detection und 3) Systemische Ursachen unterteilt sein."><div class="deliverable-header"><span class="deliverable-title">PCA-Aktionsplan</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s5-d1-status"></div></div></div>
+                <div class="rca-pca-link"><div class="rc-title">Maßnahmen für RC 1 (Occurrence):</div><textarea class="deliverable-input" placeholder="PCA 1.1..."></textarea></div>
+                <div class="rca-pca-link"><div class="rc-title">Maßnahmen für RC 2 (Non-Detection):</div><textarea class="deliverable-input" placeholder="PCA 2.1..."></textarea></div>
+                <div class="rca-pca-link"><div class="rc-title">Maßnahmen für RC 3 (Systemic):</div><textarea class="deliverable-input" placeholder="PCA 3.1..."></textarea></div>
+            </div>
+        </div></details>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- CONFIGURATION ---
+            const SARI_ID = "SARI SE-25.XXXX";
+            const SUPPLIER_EMAIL = "lieferant@example.com";
+            const AT_RISK_DAYS = 5; 
+            const startDate = new Date(); // Startdatum ist heute
+            const currentStepId = 's2'; // Simulierter aktueller Schritt
+
+            // --- INITIALIZATION ---
+            document.getElementById(`timeline-${currentStepId}`).classList.add('current-step');
+            document.getElementById('kpi-current-step').textContent = currentStepId.toUpperCase();
+            
+            const timeDiff = 1; // Start is today
+            document.getElementById('kpi-days-open').textContent = timeDiff;
+            
+            let overallStatus = 'green';
+            let nextMilestone = { name: 'N/A', days: Infinity };
+
+            // --- FUNCTIONS ---
+            const formatDate = (date) => date.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' });
+
+            const setupTimeline = () => {
+                const milestones = [
+                    { id: 's0', due: 1 }, { id: 's1', due: 2 }, { id: 's2', due: 5 }, { id: 's3', due: 7 }, 
+                    { id: 's4', due: 20 }, { id: 's5', due: 30 }, { id: 'dryrun', due: 60 }, 
+                    { id: 's6', due: 90 }, { id: 'pp', due: 100 }, { id: 's7', due: 110 }, { id: 's8', due: 120 }
+                ];
+                milestones.forEach(m => {
+                    const el = document.getElementById(`timeline-${m.id}`);
+                    if(el) {
+                        const dueDate = new Date(startDate);
+                        dueDate.setDate(startDate.getDate() + m.due);
+                        el.querySelector('.step-date').textContent = `${formatDate(dueDate)}`;
+                    }
+                });
+            };
+
+            const suggestCriterion = (text) => {
+                const outputBox = document.getElementById('suggestion-output');
+                text = text.toLowerCase();
+                if (text.includes('fod') || text.includes('foreign object')) {
+                    outputBox.textContent = "Vorschlag M1750: GEN-001 (Foreign Object Debris)";
+                } else if (text.includes('torque') || text.includes('drehmoment')) {
+                    outputBox.textContent = "Vorschlag M1750: GEN-004 (Incorrect Assembly)";
+                } else if (text.includes('crack') || text.includes('riss')) {
+                    outputBox.textContent = "Vorschlag M1750: GEN-008 (Structural Failure)";
+                } else if (text.includes('corrosion') || text.includes('korrosion')) {
+                    outputBox.textContent = "Vorschlag M1750: GEN-010 (Corrosion)";
+                } else {
+                    outputBox.textContent = "Vorschlag M1750 Kriterium: -";
+                }
+            };
+
+            // --- EVENT LISTENERS & LOGIC ---
+            setupTimeline();
+            
+            document.querySelectorAll('.deliverable-item').forEach(item => {
+                const dueDays = parseInt(item.dataset.dueDays, 10);
+                if (isNaN(dueDays)) return;
+
+                const dueDate = new Date(startDate);
+                dueDate.setDate(startDate.getDate() + dueDays);
+                
+                const statusLight = document.getElementById(item.dataset.id + '-status');
+                if (!statusLight) return;
+
+                const diffDays = Math.ceil((dueDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+                
+                let currentStatus = 'green';
+                if (diffDays < 0) currentStatus = 'red';
+                else if (diffDays <= AT_RISK_DAYS) currentStatus = 'orange';
+                
+                statusLight.classList.add(currentStatus);
+
+                if (currentStatus === 'orange' || currentStatus === 'red') {
+                    const controls = item.querySelector('.header-controls');
+                    const reminderBtn = document.createElement('a'); // Use <a> for mailto
+                    reminderBtn.className = 'reminder-btn';
+                    reminderBtn.title = 'Erinnerungs-Mail senden';
+                    reminderBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>`;
+                    
+                    const deliverableTitle = item.querySelector('.deliverable-title').textContent;
+                    const mailtoSubject = encodeURIComponent(`SARI ${SARI_ID}: Erinnerung für Deliverable '${deliverableTitle}'`);
+                    const mailtoBody = encodeURIComponent(`Sehr geehrte Damen und Herren,\n\ndies ist eine freundliche Erinnerung, dass das Deliverable "${deliverableTitle}" am ${dueDate.toLocaleDateString('de-DE')} fällig ist/war.\n\nMit freundlichen Grüßen`);
+                    reminderBtn.href = `mailto:${SUPPLIER_EMAIL}?subject=${mailtoSubject}&body=${mailtoBody}`;
+                    
+                    controls.insertBefore(reminderBtn, statusLight);
+                    reminderBtn.style.display = 'block';
+                }
+
+                if (diffDays >= 0 && diffDays < nextMilestone.days) {
+                    nextMilestone = { name: item.querySelector('.deliverable-title').textContent, days: diffDays };
+                }
+
+                if (currentStatus === 'red') overallStatus = 'red';
+                else if (currentStatus === 'orange' && overallStatus !== 'red') overallStatus = 'orange';
+            });
+
+            // Update Dashboard
+            const kpiStatus = document.getElementById('kpi-status');
+            kpiStatus.textContent = { green: 'On Time', orange: 'At Risk', red: 'Late' }[overallStatus];
+            kpiStatus.className = `kpi-value ${overallStatus}`;
+            document.getElementById('kpi-next-milestone').textContent = nextMilestone.name;
+
+            // Modal Logic
+            const modal = document.getElementById('info-modal');
+            const closeBtn = document.getElementById('modal-close');
+            document.querySelectorAll('.info-btn').forEach(button => {
+                button.onclick = (e) => {
+                    e.preventDefault();
+                    const source = e.target.closest('summary, .deliverable-item');
+                    document.getElementById('modal-title').textContent = source.dataset.infoTitle;
+                    document.getElementById('modal-body').innerHTML = source.dataset.infoText;
+                    modal.style.display = "block";
+                }
+            });
+            closeBtn.onclick = () => modal.style.display = "none";
+            window.onclick = (event) => { if (event.target == modal) modal.style.display = "none"; }
+
+            // Image preview logic
+            document.getElementById('image-upload').onchange = evt => {
+                const [file] = evt.target.files;
+                if (file) {
+                    const preview = document.getElementById('image-preview');
+                    preview.src = URL.createObjectURL(file);
+                    preview.style.display = 'block';
+                }
+            }
+            
+            // Issue Description Listener
+            document.getElementById('issue-description-input').addEventListener('keyup', (e) => {
+                suggestCriterion(e.target.value);
+            });
+        });
+    </script>
+</body>
+</html>
+
