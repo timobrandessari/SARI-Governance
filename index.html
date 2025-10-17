@@ -126,6 +126,7 @@
         .sari-card-kpis .kpi-title { font-size: 0.8rem; color: var(--text-light); }
         .sari-card-kpis .kpi-value { font-size: 1.1rem; font-weight: 500; }
 
+        /* Mini Timeline for Dashboard */
         .mini-timeline-container { margin-bottom: 16px; }
         .mini-timeline-label { font-size: 0.8rem; color: var(--text-light); margin-bottom: 6px; }
         .mini-timeline {
@@ -204,8 +205,10 @@
             height: calc(100% - 40px);
         }
         .s-step[open] { box-shadow: var(--shadow-md); }
+        .s-step.late { border-color: var(--status-red); border-width: 2px; }
         .s-step summary { display: flex; justify-content: space-between; align-items: center; font-size: 1.25rem; font-weight: 600; padding: 15px; cursor: pointer; background-color: #f9f9f9; border-radius: 8px 8px 0 0; border-bottom: 1px solid var(--border-color); outline: none; flex-shrink: 0;}
         .s-step[open] summary { background-color: var(--airbus-blue); color: white; }
+        .s-step.late summary { background-color: var(--status-red); color: white; }
         .s-step summary .info-btn { color: var(--airbus-blue); background: var(--light-blue); }
         .s-step[open] summary .info-btn { color: white; background: rgba(255,255,255,0.2); border-color: white; }
         .summary-controls { display: flex; align-items: center; gap: 10px;}
@@ -221,9 +224,12 @@
         .header-controls { display: flex; align-items: center; gap: 10px; }
         .info-btn { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--airbus-blue); background: var(--light-blue); color: var(--airbus-blue); font-weight: 700; font-size: 1rem; cursor: pointer; padding: 0; line-height: 22px; flex-shrink: 0;}
         .info-btn:hover { background: var(--airbus-blue); color: white; }
-        .reminder-btn { border: none; background: none; cursor: pointer; padding: 0; display: none; }
+        .reminder-btn { border: none; background: none; cursor: pointer; padding: 0; }
         .reminder-btn svg { width: 20px; height: 20px; fill: var(--text-light); }
         .reminder-btn:hover svg { fill: var(--airbus-blue); }
+        .s-step[open] .reminder-btn svg { fill: white; opacity: 0.7;}
+        .s-step[open] .reminder-btn:hover svg { opacity: 1;}
+
 
         .status-light { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #555; box-shadow: inset 0 0 4px rgba(0,0,0,0.2); flex-shrink: 0;}
         .status-light.green { background-color: var(--status-green); border-color: #1f7d36; }
@@ -233,8 +239,6 @@
         .deliverable-input { width: 100%; box-sizing: border-box; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; margin-top: 4px; }
         .deliverable-input:focus { border-color: var(--airbus-blue); box-shadow: 0 0 5px rgba(0,90,156,0.3); outline: none; }
         .deliverable-input[readonly] { background-color: #f8f9fa; color: #6c757d; }
-        
-        #image-preview { max-width: 100%; height: auto; margin-top: 10px; border-radius: 4px; border: 1px solid var(--border-color); display: none; }
         
         .supply-chain-breakdown { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
         .sc-node { flex: 1; text-align: center; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; background: #fafafa; }
@@ -248,6 +252,17 @@
         .analyze-btn { display: block; width: 100%; padding: 10px; margin-top: 10px; background-color: var(--airbus-blue); color: white; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; text-align: center; }
         .analyze-btn:hover { background-color: #004a80; }
 
+        .justification-box {
+            margin-top: 20px;
+            padding: 12px;
+            background-color: #fffbe6;
+            border: 1px solid var(--status-orange);
+            border-radius: 5px;
+        }
+        .justification-box label { font-weight: 600; color: var(--text-dark); }
+
+
+        /* -- Modals -- */
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); animation: fadeIn 0.3s; }
         .modal-content { background-color: #fefefe; margin: 10% auto; padding: 24px; border: 1px solid #888; border-radius: 8px; width: 90%; max-width: 600px; box-shadow: var(--shadow-md); animation: slideIn 0.3s; }
         @keyframes fadeIn { from {opacity: 0} to {opacity: 1} }
@@ -259,6 +274,7 @@
         .modal-body { line-height: 1.6; }
         .modal-body ul { margin-top: 10px; padding-left: 20px; }
 
+        /* 5-Why Modal */
         #five-why-modal .modal-content { max-width: 800px; }
         .why-level-container { margin-top: 15px; }
         .why-level { display: flex; align-items: flex-start; margin-left: 20px; padding-left: 20px; border-left: 2px solid var(--airbus-blue); margin-top: 10px; }
@@ -269,6 +285,20 @@
         .add-why-btn:hover { background: var(--airbus-blue); color: white; }
         #five-why-modal .modal-footer { margin-top: 20px; text-align: right; }
         #save-why-btn { padding: 10px 20px; background: var(--airbus-blue); color: white; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; }
+
+        /* Checklist Modal */
+        #checklist-modal .modal-content { max-width: 800px; }
+        .maturity-level { margin-bottom: 1.5em; }
+        .maturity-level h4 { margin: 0 0 0.5em 0; padding-bottom: 0.3em; border-bottom: 2px solid; }
+        .maturity-level ul { list-style-type: none; padding-left: 0; margin: 0; }
+        .maturity-level li { margin-bottom: 0.5em; }
+        .level-1 h4 { border-color: #6c757d; } /* Not mature at all */
+        .level-2 h4 { border-color: var(--status-red); } /* Early beginning */
+        .level-3 h4 { border-color: var(--status-orange); } /* Basics in place */
+        .level-4 h4 { border-color: var(--status-green); } /* Requirements in place */
+        .level-5 h4 { border-color: var(--airbus-blue); } /* Benchmark */
+
+        .checklist-toggle { margin-top: 1em; }
 
         .ishikawa-diagram { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; border-right: 4px solid var(--airbus-blue); padding: 10px; background: #fdfdfd; }
         .ishikawa-bone h4 { margin: 0 0 10px 0; padding-bottom: 5px; border-bottom: 1px solid var(--airbus-blue); color: var(--airbus-blue); }
@@ -314,8 +344,53 @@
             const sariData = [
                 { id: 'SARI SE-25.XXXX', title: 'FOD in APU compartment', level: 'l2', sim: 'M. Mustermann', creationDate: '2025-10-16', complexity: 'Medium', currentStepIndex: 2, overallStatus: 'orange' },
                 { id: 'SARI SE-25.YYYY', title: 'Incorrect torque on wing root', level: 'l3', sim: 'E. Mustermann', creationDate: '2025-10-17', complexity: 'Low', currentStepIndex: 0, overallStatus: 'green' },
-                { id: 'SARI SE-25.ZZZZ', title: 'Corrosion on pylon fitting', level: 'l1', sim: 'J. Doe', creationDate: '2025-09-22', complexity: 'High', currentStepIndex: 4, overallStatus: 'red' }
+                { id: 'SARI SE-25.ZZZZ', title: 'Corrosion on pylon fitting', level: 'l1', sim: 'J. Doe', creationDate: '2025-08-22', complexity: 'High', currentStepIndex: 4, overallStatus: 'red' }
             ];
+
+            const maturityData = {
+                s0: [
+                    { level: 1, title: 'Not mature at all', items: ['No or significantly delayed (>1 week) actions.', 'Customer is not informed.'] },
+                    { level: 2, title: 'Early beginning', items: ['Actions are only partially effective or incomplete.', 'Customer informed after >5 days.'] },
+                    { level: 3, title: 'Basics in place', items: ['All internal stocks (WIP, warehouse) are checked within 3 days.', 'Non-conforming parts are quarantined within 3 days.', 'Customer is informed within 7 days.'] },
+                    { level: 4, title: 'Requirements in place', items: ['Production line is stopped **immediately**.', 'A **formal containment action plan** (incl. owner, due date) is created within 3 days.', 'Customer is informed within **1-3 days** to minimize impact.'] },
+                    { level: 5, title: 'Benchmark', items: ['Production is restarted with effective containment **within 24 hours**.', 'An **initial problem description from the customer\'s perspective** is created.'] }
+                ],
+                s1: [
+                    { level: 1, title: 'Not mature at all', items: ['No evidence of a team.'] },
+                    { level: 2, title: 'Early beginning', items: ['MFT members are nominated.', 'A 9S Leader is identified.', '❌ Key functions like "Operations" or a management "Sponsor" are missing.'] },
+                    { level: 3, title: 'Basics in place', items: ['A representative from **"Operations"** is part of the team.'] },
+                    { level: 4, title: 'Requirements in place', items: ['A **"Sponsor"** from top management is nominated and actively supports the team.', 'The MFT includes employees who **perform the actual work** (e.g., operator, inspector).', 'The **supplier is actively integrated** if it\'s a supplier issue.'] },
+                    { level: 5, title: 'Benchmark', items: ['The **"Problem Owner"** (manager of the responsible department) leads the investigation.', '**Lessons Learned** from previous investigations are used as formal input.'] }
+                ],
+                 s2: [
+                    { level: 1, title: 'Not mature at all', items: ['Description only focuses on customer symptoms without internal analysis.'] },
+                    { level: 2, title: 'Early beginning', items: ['Description is a mix of facts and subjective perception.', 'Fails to adhere to the "1 object, 1 defect" principle.'] },
+                    { level: 3, title: 'Basics in place', items: ['Problem description is based exclusively on facts and figures.', 'Problem is clearly formulated according to the **"1 object, 1 defect"** principle.'] },
+                    { level: 4, title: 'Requirements in place', items: ['A completed **5W2H analysis** (based on facts) is available.', 'A **final "Problem Statement"** summarizing the 5W2H is documented.'] },
+                    { level: 5, title: 'Benchmark', items: ['For complex cases, an **IS / IS NOT analysis** is created to precisely define the scope.', 'A **process workflow** is visualized, showing the defect\'s path from origin to delivery.'] }
+                ],
+                s3: [
+                    { level: 1, title: 'Not mature at all', items: ['Containment actions are not effective or not implemented.'] },
+                    { level: 2, title: 'Early beginning', items: ['Actions are implemented, but their effectiveness is not demonstrated. Traceability is incomplete.'] },
+                    { level: 3, title: 'Basics in place', items: ['Effectiveness is demonstrated internally but not formally communicated.', 'Partial control of WIP/All stocks.'] },
+                    { level: 4, title: 'Requirements in place', items: ['A **formal proof of 100% effectiveness** is documented (e.g., test with bad parts).', '**Full traceability** of all affected parts (WIP, in-service) is secured and documented.'] },
+                    { level: 5, title: 'Benchmark', items: ['Effectiveness is **continuously reviewed**.', 'Containment is extended to **similar products/processes** (look across).'] }
+                ],
+                s4: [
+                    { level: 1, title: 'Not mature at all', items: ['No logical link between the proposed cause and the problem.'] },
+                    { level: 2, title: 'Early beginning', items: ['No clear separation between **Occurrence** and **Non-Detection** root causes.', '5-Why analysis stops at "human error".'] },
+                    { level: 3, title: 'Basics in place', items: ['The RCA is clearly split into **Occurrence** and **Non-Detection** paths.', 'A 5-Why analysis is applied to both paths.'] },
+                    { level: 4, title: 'Requirements in place', items: ['An **Ishikawa diagram** is used to brainstorm all potential causes.', 'The **root cause is proven** (e.g., by reproducing the failure).', 'A **Systemic / Management root cause** is identified.'] },
+                    { level: 5, title: 'Benchmark', items: ['The **most appropriate RCA method** is chosen based on complexity (e.g., Shainin, DoE for complex issues).'] }
+                ],
+                s5: [
+                    { level: 1, title: 'Not mature at all', items: ['No clear link between action and root cause.', 'Proposed actions are not sustainable (e.g., "be more careful").'] },
+                    { level: 2, title: 'Early beginning', items: ['Actions are linked to a cause, but ownership and schedule are unclear.'] },
+                    { level: 3, title: 'Basics in place', items: ['Each action has a clear owner and a due date.', 'For low-detectability issues, actions focus on **prevention** (Poka Yoke).'] },
+                    { level: 4, title: 'Requirements in place', items: ['The action plan contains separate, specific actions for **Occurrence**, **Non-Detection**, and **Systemic** root causes.'] },
+                    { level: 5, title: 'Benchmark', items: ['**Success criteria (KPIs)** are defined for each action before selection.', 'A **risk analysis** of the proposed actions is performed.'] }
+                ]
+            };
             
             // --- VIEWS & NAVIGATION ---
             const dashboardView = document.getElementById('dashboard-view');
@@ -325,7 +400,6 @@
                 renderDashboard();
                 dashboardView.style.display = 'block';
                 sariDetailView.style.display = 'none';
-                document.querySelector('.main-container').style.overflowY = 'auto';
             };
 
             const showSariDetail = (sariId) => {
@@ -333,7 +407,6 @@
                 renderSariDetail(sari);
                 dashboardView.style.display = 'none';
                 sariDetailView.style.display = 'flex';
-                document.querySelector('.main-container').style.overflowY = 'hidden';
             };
             
             document.getElementById('nav-dashboard-btn').onclick = showDashboard;
@@ -379,7 +452,7 @@
                                 <span class="sari-level-badge ${sari.level}">${sari.level.toUpperCase()}</span>
                             </div>
                             <div class="sari-card-kpis">
-                                <div class="kpi-card"><div class="kpi-title">Current Step</div><div class="kpi-value">${milestones[sari.currentStepIndex]?.name || 'N/A'}</div></div>
+                                <div class="kpi-card"><div class="kpi-title">Current Step</div><div class="kpi-value">${milestones.find( (m,i) => i === sari.currentStepIndex && !m.isGate)?.name || 'N/A'}</div></div>
                                 <div class="kpi-card"><div class="kpi-title">Days Open</div><div class="kpi-value">${daysOpen}</div></div>
                                 <div class="kpi-card"><div class="kpi-title">Creation Date</div><div class="kpi-value">${creationDate.toLocaleDateString('en-GB')}</div></div>
                                 <div class="kpi-card"><div class="kpi-title">Complexity</div><div class="kpi-value">${sari.complexity}</div></div>
@@ -417,6 +490,7 @@
                 sariDetailView.innerHTML = `
                     <div id="info-modal" class="modal"><div class="modal-content"><div class="modal-header"><h3 id="modal-title"></h3><span class="modal-close-btn">&times;</span></div><div id="modal-body" class="modal-body"></div></div></div>
                     <div id="five-why-modal" class="modal"><div class="modal-content"><div class="modal-header"><h3 id="five-why-title">5-Why Analysis</h3><span class="modal-close-btn">&times;</span></div><div class="modal-body"><label for="why-problem-statement">Problem Statement</label><textarea id="why-problem-statement" class="deliverable-input" rows="2"></textarea><div id="why-container"></div></div><div class="modal-footer"><button id="save-why-btn">Save & Close</button></div></div></div>
+                    <div id="checklist-modal" class="modal"><div class="modal-content"><div class="modal-header"><h3 id="checklist-title"></h3><span class="modal-close-btn">&times;</span></div><div id="checklist-body" class="modal-body"></div></div></div>
                     <div class="header"><h1>SARI Governance Tool</h1><h2 id="sari-detail-title">${SARI_ID}</h2></div>
                     <div class="project-health"><div class="kpi-card"><div class="kpi-title">Overall Status</div><div class="kpi-value" id="kpi-status"></div></div><div class="kpi-card"><div class="kpi-title">Days Open</div><div class="kpi-value">${daysOpen}</div></div><div class="kpi-card"><div class="kpi-title">Current Step</div><div class="kpi-value">${milestones[currentStepIndex]?.name || 'N/A'}</div></div><div class="kpi-card"><div class="kpi-title">Next Milestone</div><div class="kpi-value" id="kpi-next-milestone"></div></div></div>
                     <div class="steps-timeline"></div>
@@ -438,12 +512,12 @@
 
                 const stepsContainer = sariDetailView.querySelector('.steps-details-container');
                 stepsContainer.innerHTML = `
-                    <details class="s-step" open><summary data-info-title="S0: Objective" data-info-text="The objective is to immediately contain the problem to protect the customer and provide transparent initial information. Speed is the critical factor here."><div class="summary-controls"><a href="mailto:${SUPPLIER_EMAIL}?subject=Reminder: SARI ${SARI_ID} - Step S0" class="reminder-btn" style="display: block;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a><button class="info-btn">?</button></div><span>S0: Containment</span></summary><div class="deliverables-list"><div class="deliverable-item" data-due-days="1" data-id="s0-d1"><div class="deliverable-header"><span class="deliverable-title">Customer Notification</span><div class="header-controls"><button class="info-btn" data-info-title="Customer Notification Requirement" data-info-text="According to the Maturity Grid (Benchmark), the customer must be informed within 1 day. This is a critical KPI.">?</button><div class="status-light" id="s0-d1-status"></div></div></div><input type="date" class="deliverable-input"></div></div></details>
-                    <details class="s-step"><summary data-info-title="S1: Objective" data-info-text="Establish a competent, cross-functional team (MFT) with a clear management mandate ('Sponsor')."><div class="summary-controls"><a href="mailto:${SUPPLIER_EMAIL}?subject=Reminder: SARI ${SARI_ID} - Step S1" class="reminder-btn" style="display: block;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a><button class="info-btn">?</button></div><span>S1: Team</span></summary><div class="deliverables-list"><div class="deliverable-item" data-due-days="2" data-id="s1-d1"><div class="deliverable-header"><span class="deliverable-title">Team Charter (MFT)</span><div class="header-controls"><button class="info-btn" data-info-title="MFT Composition" data-info-text="Mandatory roles: Leader, Sponsor, Problem Owner, Operations.">?</button><div class="status-light" id="s1-d1-status"></div></div></div><textarea class="deliverable-input" style="height: 120px;" placeholder="Leader:&#10;Sponsor:&#10;..."></textarea></div></div></details>
-                    <details class="s-step" open><summary data-info-title="S2: Objective" data-info-text="Create an unambiguous, fact-based problem description. Gather hard evidence ('Go Look See')."><div class="summary-controls"><a href="mailto:${SUPPLIER_EMAIL}?subject=Reminder: SARI ${SARI_ID} - Step S2" class="reminder-btn" style="display: block;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a><button class="info-btn">?</button></div><span>S2: Evidence Hub</span></summary><div class="deliverables-list"><div class="deliverable-item" data-due-days="7" data-id="s2-d2"><div class="deliverable-header"><span class="deliverable-title">Issue Description</span><div class="header-controls"><button class="info-btn" data-info-title="Issue Description Requirement" data-info-text="Describe the problem precisely.">?</button><div class="status-light" id="s2-d2-status"></div></div></div><textarea id="issue-description-input" class="deliverable-input" style="height: 100px;"></textarea><div class="suggestion-box" id="suggestion-output">-</div></div></div></details>
-                    <details class="s-step"><summary data-info-title="S3: Objective" data-info-text="Prove that the immediate containment actions are 100% effective."><div class="summary-controls"><a href="mailto:${SUPPLIER_EMAIL}?subject=Reminder: SARI ${SARI_ID} - Step S3" class="reminder-btn" style="display: block;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a><button class="info-btn">?</button></div><span>S3: Validate Containment</span></summary><div class="deliverables-list"></div></details>
-                    <details class="s-step" open><summary data-info-title="S4: Objective" data-info-text="Systematically identify all cause levels: Occurrence, Non-Detection, and Systemic."><div class="summary-controls"><a href="mailto:${SUPPLIER_EMAIL}?subject=Reminder: SARI ${SARI_ID} - Step S4" class="reminder-btn" style="display: block;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a><button class="info-btn">?</button></div><span>S4: RCA Cockpit</span></summary><div class="deliverables-list"><div class="deliverable-item" data-due-days="45" data-id="s4-d0"><div class="deliverable-header"><span class="deliverable-title">Ishikawa Diagram</span><div class="header-controls"><button class="info-btn" data-info-title="Ishikawa Requirement" data-info-text="Brainstorm all potential causes using the Ishikawa (Fishbone) diagram to structure your analysis.">?</button><div class="status-light" id="s4-d0-status"></div></div></div><div class="ishikawa-diagram"><div class="ishikawa-bone"><h4>Man</h4><textarea></textarea></div><div class="ishikawa-bone"><h4>Machine</h4><textarea></textarea></div><div class="ishikawa-bone"><h4>Material</h4><textarea></textarea></div><div class="ishikawa-bone"><h4>Method</h4><textarea></textarea></div><div class="ishikawa-bone"><h4>Management</h4><textarea></textarea></div><div class="ishikawa-bone"><h4>Milieu</h4><textarea></textarea></div></div></div><div class="deliverable-item" data-due-days="45" data-id="s4-d1"><div class="deliverable-header"><span class="deliverable-title">RC 1: Occurrence</span><div class="header-controls"><button class="info-btn" data-info-title="Occurrence Root Cause" data-info-text="Path 1: Why did the failure *OCCUR*?">?</button><div class="status-light" id="s4-d1-status"></div></div></div><input id="rc1-input" class="deliverable-input" readonly><button class="analyze-btn" data-rc-target="rc1-input" data-rc-title="5-Why: RC 1">5-Why</button></div><div class="deliverable-item" data-due-days="45" data-id="s4-d2"><div class="deliverable-header"><span class="deliverable-title">RC 2: Non-Detection</span><div class="header-controls"><button class="info-btn" data-info-title="Non-Detection Root Cause" data-info-text="Path 2: Why was the failure *NOT DETECTED*?">?</button><div class="status-light" id="s4-d2-status"></div></div></div><input id="rc2-input" class="deliverable-input" readonly><button class="analyze-btn" data-rc-target="rc2-input" data-rc-title="5-Why: RC 2">5-Why</button></div></div></details>
-                    <details class="s-step"><summary data-info-title="S5: Objective" data-info-text="Define effective corrective actions (PCAs) that address EVERY root cause identified in S4."><div class="summary-controls"><a href="mailto:${SUPPLIER_EMAIL}?subject=Reminder: SARI ${SARI_ID} - Step S5" class="reminder-btn" style="display: block;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a><button class="info-btn">?</button></div><span>S5: Define Actions</span></summary><div class="deliverables-list"><div class="deliverable-item" data-due-days="80" data-id="s5-d1"><div class="deliverable-header"><span class="deliverable-title">PCA Action Plan</span><div class="header-controls"><button class="info-btn" data-info-title="PCA Action Plan" data-info-text="The plan must be clearly divided into actions against 1) Occurrence, 2) Non-Detection, and 3) Systemic root causes.">?</button><div class="status-light" id="s5-d1-status"></div></div></div><div class="rca-pca-link"><div class="rc-title">Actions for RC 1 (Occurrence):</div><textarea class="deliverable-input" placeholder="PCA 1.1..."></textarea></div><div class="rca-pca-link"><div class="rc-title">Actions for RC 2 (Non-Detection):</div><textarea class="deliverable-input" placeholder="PCA 2.1..."></textarea></div></div></div></details>
+                    <details class="s-step" open data-step-id="s0"><summary><span>S0: Containment</span><div class="summary-controls"><a href="mailto:${SUPPLIER_EMAIL}?subject=Reminder: SARI ${SARI_ID} - Step S0" class="reminder-btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a><button class="info-btn">?</button></div></summary><div class="deliverables-list"><div class="deliverable-item" data-due-days="1" data-id="s0-d1"><div class="deliverable-header"><span class="deliverable-title">Customer Notification</span><div class="header-controls"><div class="status-light" id="s0-d1-status"></div></div></div><input type="date" class="deliverable-input"></div><div class="deliverable-item" data-due-days="1" data-id="s0-d2"><div class="deliverable-header"><span class="deliverable-title">Containment Action Plan</span><div class="header-controls"><div class="status-light" id="s0-d2-status"></div></div></div><input type="file" class="deliverable-input"></div></div></details>
+                    <details class="s-step"><summary data-step-id="s1"><span>S1: Team</span><div class="summary-controls"><a href="mailto:${SUPPLIER_EMAIL}?subject=Reminder: SARI ${SARI_ID} - Step S1" class="reminder-btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a><button class="info-btn">?</button></div></summary><div class="deliverables-list"><div class="deliverable-item" data-due-days="2" data-id="s1-d1"><div class="deliverable-header"><span class="deliverable-title">Team Charter (MFT)</span><div class="header-controls"><div class="status-light" id="s1-d1-status"></div></div></div><textarea class="deliverable-input" style="height: 120px;" placeholder="Leader:&#10;Sponsor:&#10;..."></textarea></div></div></details>
+                    <details class="s-step" open><summary data-step-id="s2"><span>S2: Evidence Hub</span><div class="summary-controls"><a href="mailto:${SUPPLIER_EMAIL}?subject=Reminder: SARI ${SARI_ID} - Step S2" class="reminder-btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a><button class="info-btn">?</button></div></summary><div class="deliverables-list"><div class="deliverable-item" data-due-days="7" data-id="s2-d2"><div class="deliverable-header"><span class="deliverable-title">Issue Description</span><div class="header-controls"><div class="status-light" id="s2-d2-status"></div></div></div><textarea id="issue-description-input" class="deliverable-input" style="height: 100px;"></textarea><div class="suggestion-box" id="suggestion-output">-</div></div></div></details>
+                    <details class="s-step"><summary data-step-id="s3"><span>S3: Validate Containment</span><div class="summary-controls"><a href="mailto:${SUPPLIER_EMAIL}?subject=Reminder: SARI ${SARI_ID} - Step S3" class="reminder-btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a><button class="info-btn">?</button></div></summary><div class="deliverables-list"><div class="deliverable-item" data-due-days="14" data-id="s3-d1"><div class="deliverable-header"><span class="deliverable-title">Effectiveness Proof</span><div class="header-controls"><div class="status-light" id="s3-d1-status"></div></div></div><input type="file" class="deliverable-input"></div></div></details>
+                    <details class="s-step" open><summary data-step-id="s4"><span>S4: RCA Cockpit</span><div class="summary-controls"><a href="mailto:${SUPPLIER_EMAIL}?subject=Reminder: SARI ${SARI_ID} - Step S4" class="reminder-btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a><button class="info-btn">?</button></div></summary><div class="deliverables-list"><div class="deliverable-item" data-due-days="45" data-id="s4-d0"><div class="deliverable-header"><span class="deliverable-title">Ishikawa Diagram</span><div class="header-controls"><div class="status-light" id="s4-d0-status"></div></div></div><div class="ishikawa-diagram"><div class="ishikawa-bone"><h4>Man</h4><textarea></textarea></div><div class="ishikawa-bone"><h4>Machine</h4><textarea></textarea></div><div class="ishikawa-bone"><h4>Material</h4><textarea></textarea></div><div class="ishikawa-bone"><h4>Method</h4><textarea></textarea></div><div class="ishikawa-bone"><h4>Management</h4><textarea></textarea></div><div class="ishikawa-bone"><h4>Milieu</h4><textarea></textarea></div></div></div><div class="deliverable-item" data-due-days="45" data-id="s4-d1"><div class="deliverable-header"><span class="deliverable-title">RC 1: Occurrence</span><div class="header-controls"><div class="status-light" id="s4-d1-status"></div></div></div><input id="rc1-input" class="deliverable-input" readonly><button class="analyze-btn" data-rc-target="rc1-input" data-rc-title="5-Why: RC 1">5-Why</button></div><div class="deliverable-item" data-due-days="45" data-id="s4-d2"><div class="deliverable-header"><span class="deliverable-title">RC 2: Non-Detection</span><div class="header-controls"><div class="status-light" id="s4-d2-status"></div></div></div><input id="rc2-input" class="deliverable-input" readonly><button class="analyze-btn" data-rc-target="rc2-input" data-rc-title="5-Why: RC 2">5-Why</button></div></div></details>
+                    <details class="s-step"><summary data-step-id="s5"><span>S5: Define Actions</span><div class="summary-controls"><a href="mailto:${SUPPLIER_EMAIL}?subject=Reminder: SARI ${SARI_ID} - Step S5" class="reminder-btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a><button class="info-btn">?</button></div></summary><div class="deliverables-list"><div class="deliverable-item" data-due-days="80" data-id="s5-d1"><div class="deliverable-header"><span class="deliverable-title">PCA Action Plan</span><div class="header-controls"><div class="status-light" id="s5-d1-status"></div></div></div><div class="rca-pca-link"><div class="rc-title">Actions for RC 1 (Occurrence):</div><textarea class="deliverable-input" placeholder="PCA 1.1..."></textarea></div><div class="rca-pca-link"><div class="rc-title">Actions for RC 2 (Non-Detection):</div><textarea class="deliverable-input" placeholder="PCA 2.1..."></textarea></div></div></div></details>
                 `;
                 
                 let today = new Date();
@@ -465,6 +539,17 @@
                     const statusLight = sariDetailView.querySelector(`#${item.dataset.id}-status`);
                     if (statusLight) statusLight.classList.add(currentStatus);
                     
+                    if (currentStatus === 'red') {
+                        const parentStep = item.closest('.s-step');
+                        parentStep.classList.add('late');
+                        if (!parentStep.querySelector('.justification-box')) {
+                            const justificationBox = document.createElement('div');
+                            justificationBox.className = 'justification-box';
+                            justificationBox.innerHTML = `<label for="justification-${parentStep.dataset.stepId}">Justification for Delay</label><textarea id="justification-${parentStep.dataset.stepId}" class="deliverable-input" rows="3" placeholder="Please provide a reason for the delay..."></textarea>`;
+                            parentStep.querySelector('.deliverables-list').appendChild(justificationBox);
+                        }
+                    }
+
                     if (diffDays >= 0 && diffDays < nextMilestone.days) {
                         nextMilestone = { name: item.querySelector('.deliverable-title').textContent, days: diffDays };
                     }
@@ -481,17 +566,27 @@
             }
 
             function bindModalEvents(container) {
-                 const infoModal = container.querySelector('#info-modal');
+                 const checklistModal = container.querySelector('#checklist-modal');
                  const whyModal = container.querySelector('#five-why-modal');
-                 if(!infoModal || !whyModal) return;
+                 if(!checklistModal || !whyModal) return;
 
-                container.querySelectorAll('.info-btn').forEach(button => {
+                container.querySelectorAll('summary .info-btn').forEach(button => {
                     button.onclick = (e) => {
                         e.preventDefault();
-                        const source = e.target.closest('summary, .deliverable-item');
-                        infoModal.querySelector('#modal-title').textContent = source.dataset.infoTitle;
-                        infoModal.querySelector('#modal-body').innerHTML = source.dataset.infoText;
-                        infoModal.style.display = "block";
+                        const stepId = e.target.closest('summary').dataset.stepId;
+                        const data = maturityData[stepId];
+                        if (!data) return;
+
+                        let content = `<p>This checklist is based on the 8D/9S Maturity Assessment Grid. The goal is to meet "Requirements in place" (Level 4) as a standard.</p><label class="checklist-toggle"><input type="checkbox" onchange="this.closest('.modal-body').querySelectorAll('.level-5').forEach(el => el.style.display = this.checked ? 'block' : 'none')"> Show Benchmark (Level 5) criteria</label><hr>`;
+                        
+                        data.forEach(levelData => {
+                            let itemsHTML = levelData.items.map(item => `<li>- ${item}</li>`).join('');
+                            content += `<div class="maturity-level level-${levelData.level}" ${levelData.level === 5 ? 'style="display:none"' : ''}><h4>Level ${levelData.level}: ${levelData.title}</h4><ul>${itemsHTML}</ul></div>`;
+                        });
+                        
+                        checklistModal.querySelector('#checklist-title').textContent = `Maturity Checklist for Step ${stepId.toUpperCase()}`;
+                        checklistModal.querySelector('#checklist-body').innerHTML = content;
+                        checklistModal.style.display = "block";
                     }
                 });
 
@@ -529,10 +624,10 @@
                     whyModal.style.display = "none";
                 };
 
-                [infoModal, whyModal].forEach(modal => {
+                [checklistModal, whyModal].forEach(modal => {
                     modal.querySelector('.modal-close-btn').onclick = () => modal.style.display = "none";
                 });
-                window.onclick = (event) => { if (event.target === infoModal || event.target === whyModal) event.target.style.display = "none"; }
+                window.onclick = (event) => { if (event.target === checklistModal || event.target === whyModal) event.target.style.display = "none"; }
             }
 
             // Initial Load
