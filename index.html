@@ -50,9 +50,6 @@
             display: flex;
             align-items: center;
             box-shadow: var(--shadow-sm);
-            position: sticky;
-            top: 0;
-            z-index: 100;
             flex-shrink: 0;
         }
 
@@ -73,11 +70,16 @@
 
         .main-container {
             padding: 24px;
-            overflow-y: auto; /* Allow scrolling for dashboard */
             flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
         }
 
         /* --- Dashboard View --- */
+        #dashboard-view {
+            overflow-y: auto;
+        }
         #dashboard-view h1 { color: var(--text-dark); margin-top: 0; }
         .sari-grid {
             display: grid;
@@ -124,7 +126,6 @@
         .sari-card-kpis .kpi-title { font-size: 0.8rem; color: var(--text-light); }
         .sari-card-kpis .kpi-value { font-size: 1.1rem; font-weight: 500; }
 
-        /* Mini Timeline for Dashboard */
         .mini-timeline-container { margin-bottom: 16px; }
         .mini-timeline-label { font-size: 0.8rem; color: var(--text-light); margin-bottom: 6px; }
         .mini-timeline {
@@ -156,25 +157,24 @@
         #sari-detail-view { 
             display: none; /* Initially hidden */
             flex-direction: column;
-            height: calc(100vh - 120px); /* Adjust height considering header and container padding */
-            padding-bottom: 10vh; /* 10% bottom margin */
-            box-sizing: border-box;
+            flex-grow: 1;
+            min-height: 0;
         } 
-        .header { text-align: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid var(--airbus-blue); flex-shrink: 0;}
-        .header h1 { margin: 0; }
-        .header h2 { margin: 5px 0 0 0; color: var(--text-light); font-weight: 400; }
+        .header { text-align: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid var(--airbus-blue); flex-shrink: 0;}
+        .header h1 { margin: 0; font-size: 1.75rem; }
+        .header h2 { margin: 4px 0 0 0; color: var(--text-light); font-weight: 400; font-size: 1.1rem; }
 
-        .project-health { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-bottom: 24px; padding: 16px; background: #fff; border-radius: 8px; box-shadow: var(--shadow-md); flex-shrink: 0;}
+        .project-health { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-bottom: 16px; padding: 12px; background: #fff; border-radius: 8px; box-shadow: var(--shadow-md); flex-shrink: 0;}
         .kpi-card .kpi-value.red { color: var(--status-red); }
         .kpi-card .kpi-value.orange { color: var(--status-orange); }
         .kpi-card .kpi-value.green { color: var(--status-green); }
 
 
-        .steps-timeline { display: flex; justify-content: space-between; padding: 10px 0; margin-bottom: 24px; border: 1px solid var(--border-color); background: #fff; border-radius: 8px; box-shadow: var(--shadow-sm); flex-shrink: 0;}
-        .step-milestone { flex-basis: 9%; text-align: center; padding: 10px 5px; border-right: 1px solid #eee; position: relative; transition: background-color 0.3s; }
+        .steps-timeline { display: flex; justify-content: space-between; padding: 8px 0; margin-bottom: 16px; border: 1px solid var(--border-color); background: #fff; border-radius: 8px; box-shadow: var(--shadow-sm); flex-shrink: 0;}
+        .step-milestone { flex-basis: 9%; text-align: center; padding: 8px 5px; border-right: 1px solid #eee; position: relative; transition: background-color 0.3s; }
         .step-milestone:last-child { border-right: none; }
         .step-milestone .step-title { font-weight: 600; font-size: 0.9rem; color: var(--airbus-blue); }
-        .step-milestone .step-date { font-size: 0.8rem; color: #777; margin-top: 5px; }
+        .step-milestone .step-date { font-size: 0.8rem; color: #777; margin-top: 4px; }
         .step-milestone.gate { background: var(--gate-grey); }
         .step-milestone.gate .step-title { color: var(--text-dark); }
         .step-milestone.current-step { background-color: var(--light-blue); border-bottom: 3px solid var(--airbus-blue); }
@@ -182,13 +182,14 @@
         .steps-details-container { 
             display: flex; 
             overflow-x: auto; 
-            padding: 10px 0 20px 0; 
+            padding: 10px 0; 
             border: 2px solid var(--airbus-blue); 
             border-radius: 10px; 
             background: #ffffff; 
             box-shadow: var(--shadow-md); 
-            flex-grow: 1; /* This makes it fill the available space */
-            min-height: 0; /* Flexbox bug fix for scrolling */
+            flex-grow: 1;
+            min-height: 0;
+            padding-bottom: 2%; /* Bottom margin */
         }
 
         .s-step { 
@@ -200,7 +201,7 @@
             transition: all 0.2s ease; 
             display: flex;
             flex-direction: column;
-            height: calc(100% - 40px); /* Adjust for margin */
+            height: calc(100% - 40px);
         }
         .s-step[open] { box-shadow: var(--shadow-md); }
         .s-step summary { display: flex; justify-content: space-between; align-items: center; font-size: 1.25rem; font-weight: 600; padding: 15px; cursor: pointer; background-color: #f9f9f9; border-radius: 8px 8px 0 0; border-bottom: 1px solid var(--border-color); outline: none; flex-shrink: 0;}
@@ -210,7 +211,7 @@
         .summary-controls { display: flex; align-items: center; gap: 10px;}
         .deliverables-list { 
             padding: 16px; 
-            overflow-y: auto; /* Enable vertical scrolling INSIDE the card */
+            overflow-y: auto;
             flex-grow: 1;
         }
 
