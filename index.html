@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sari Governance Tool</title>
+    <title>SARI Governance Tool</title>
     <style>
         :root {
             --airbus-blue: #005A9C;
@@ -145,7 +145,6 @@
         .header h2 { margin: 5px 0 0 0; color: var(--text-light); font-weight: 400; }
 
         .project-health { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-bottom: 24px; padding: 16px; background: #fff; border-radius: 8px; box-shadow: var(--shadow-md); }
-        /* .kpi-card is shared */
         .kpi-card .kpi-value.red { color: var(--status-red); }
         .kpi-card .kpi-value.orange { color: var(--status-orange); }
         .kpi-card .kpi-value.green { color: var(--status-green); }
@@ -168,6 +167,7 @@
         .s-step[open] summary { background-color: var(--airbus-blue); color: white; }
         .s-step summary .info-btn { color: var(--airbus-blue); background: var(--light-blue); }
         .s-step[open] summary .info-btn { color: white; background: rgba(255,255,255,0.2); border-color: white; }
+        .summary-controls { display: flex; align-items: center; gap: 10px;}
         .deliverables-list { padding: 16px; }
 
         .deliverable-item { margin-bottom: 20px; padding: 12px; background: #fdfdfd; border: 1px solid #e0e0e0; border-radius: 5px; }
@@ -224,6 +224,10 @@
         .add-why-btn:hover { background: var(--airbus-blue); color: white; }
         #five-why-modal .modal-footer { margin-top: 20px; text-align: right; }
         #save-why-btn { padding: 10px 20px; background: var(--airbus-blue); color: white; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; }
+
+        .ishikawa-diagram { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; border-right: 4px solid var(--airbus-blue); padding: 10px; background: #fdfdfd; }
+        .ishikawa-bone h4 { margin: 0 0 10px 0; padding-bottom: 5px; border-bottom: 1px solid var(--airbus-blue); color: var(--airbus-blue); }
+        .ishikawa-bone textarea { width: 100%; height: 60px; box-sizing: border-box; border: 1px solid #ddd; font-family: monospace; font-size: 0.85rem; }
     </style>
 </head>
 <body>
@@ -238,7 +242,7 @@
     <main class="main-container">
         <!-- Dashboard View -->
         <div id="dashboard-view">
-            <h1>Meine SARI Fälle</h1>
+            <h1>My SARI Cases</h1>
             <div class="sari-grid">
                 <!-- SARI Cards will be dynamically inserted here -->
             </div>
@@ -256,16 +260,16 @@
 
             // --- MOCK DATA ---
             const milestones = [
-                { id: 's0', name: 'S0', due: 1 }, { id: 's1', name: 'S1', due: 2 }, { id: 's2', name: 'S2', due: 5 }, 
-                { id: 's3', name: 'S3', due: 7 }, { id: 's4', name: 'S4', due: 20 }, { id: 's5', name: 'S5', due: 30 }, 
-                { id: 'pp', name: 'PP', due: 40, isGate: true }, { id: 's6', name: 'S6', due: 90 }, 
-                { id: 'dryrun', name: 'Dry Run', due: 100, isGate: true }, { id: 's7', name: 'S7', due: 110 }, { id: 's8', name: 'S8', due: 120 }
+                { id: 's0', name: 'S0', due: 1 }, { id: 's1', name: 'S1', due: 2 }, { id: 's2', name: 'S2', due: 7 }, 
+                { id: 's3', name: 'S3', due: 14 }, { id: 's4', name: 'S4', due: 45 }, { id: 'dryrun', name: 'Dry Run', due: 60, isGate: true },
+                { id: 's5', name: 'S5', due: 80 }, { id: 'pp', name: 'PP', due: 100, isGate: true }, { id: 's6', name: 'S6', due: 150 }, 
+                { id: 's7', name: 'S7', due: 170 }, { id: 's8', name: 'S8', due: 180 }
             ];
 
             const sariData = [
-                { id: 'SARI SE-25.XXXX', title: 'FOD in APU compartment', level: 'l2', sim: 'Max Mustermann', daysOpen: 1, currentStepIndex: 2, overallStatus: 'orange' },
-                { id: 'SARI SE-25.YYYY', title: 'Incorrect torque on wing root', level: 'l3', sim: 'Erika Mustermann', daysOpen: 0, currentStepIndex: 0, overallStatus: 'green' },
-                { id: 'SARI SE-25.ZZZZ', title: 'Corrosion on pylon fitting', level: 'l1', sim: 'John Doe', daysOpen: 25, currentStepIndex: 4, overallStatus: 'red' }
+                { id: 'SARI SE-25.XXXX', title: 'FOD in APU compartment', level: 'l2', sim: 'M. Mustermann', creationDate: '2025-10-16', complexity: 'Medium', currentStepIndex: 2, overallStatus: 'orange' },
+                { id: 'SARI SE-25.YYYY', title: 'Incorrect torque on wing root', level: 'l3', sim: 'E. Mustermann', creationDate: '2025-10-17', complexity: 'Low', currentStepIndex: 0, overallStatus: 'green' },
+                { id: 'SARI SE-25.ZZZZ', title: 'Corrosion on pylon fitting', level: 'l1', sim: 'J. Doe', creationDate: '2025-09-22', complexity: 'High', currentStepIndex: 4, overallStatus: 'red' }
             ];
             
             // --- VIEWS & NAVIGATION ---
@@ -290,7 +294,8 @@
             // --- RENDER FUNCTIONS ---
             function renderDashboard() {
                 const grid = document.querySelector('#dashboard-view .sari-grid');
-                grid.innerHTML = ''; // Clear existing cards
+                grid.innerHTML = '';
+                const today = new Date();
                 
                 sariData.forEach(sari => {
                     const card = document.createElement('div');
@@ -298,15 +303,17 @@
                     card.dataset.sariId = sari.id;
                     if (sari.overallStatus === 'red') card.style.borderColor = 'var(--status-red)';
 
-                    const nextDueDate = new Date();
+                    const creationDate = new Date(sari.creationDate);
+                    const daysOpen = Math.ceil((today - creationDate) / (1000 * 60 * 60 * 24));
+
                     const nextStep = milestones[sari.currentStepIndex];
+                    const nextDueDate = new Date(creationDate);
                     if(nextStep) {
-                        nextDueDate.setDate(nextDueDate.getDate() - sari.daysOpen + nextStep.due);
+                        nextDueDate.setDate(creationDate.getDate() + nextStep.due);
                     }
 
                     let miniTimelineHTML = '';
-                    milestones.forEach((m, index) => {
-                        if (m.isGate) return; // Don't show gates in mini timeline
+                    milestones.filter(m => !m.isGate).forEach((m, index) => {
                         let statusClass = 'future';
                         if (index < sari.currentStepIndex) statusClass = 'completed';
                         else if (index === sari.currentStepIndex) {
@@ -326,16 +333,18 @@
                             </div>
                             <div class="sari-card-kpis">
                                 <div class="kpi-card"><div class="kpi-title">Current Step</div><div class="kpi-value">${milestones[sari.currentStepIndex]?.name || 'N/A'}</div></div>
-                                <div class="kpi-card"><div class="kpi-title">Days Open</div><div class="kpi-value">${sari.daysOpen}</div></div>
-                                <div class="kpi-card"><div class="kpi-title">Next Due</div><div class="kpi-value">${nextStep ? nextDueDate.toLocaleDateString('de-DE') : 'N/A'}</div></div>
+                                <div class="kpi-card"><div class="kpi-title">Days Open</div><div class="kpi-value">${daysOpen}</div></div>
+                                <div class="kpi-card"><div class="kpi-title">Creation Date</div><div class="kpi-value">${creationDate.toLocaleDateString('en-GB')}</div></div>
+                                <div class="kpi-card"><div class="kpi-title">Complexity</div><div class="kpi-value">${sari.complexity}</div></div>
+                                <div class="kpi-card"><div class="kpi-title">Next Due</div><div class="kpi-value">${nextStep ? nextDueDate.toLocaleDateString('en-GB') : 'N/A'}</div></div>
                                 <div class="kpi-card"><div class="kpi-title">SIM</div><div class="kpi-value">${sari.sim}</div></div>
                             </div>
                             <div class="mini-timeline-container">
-                                <div class="mini-timeline-label">Fortschritt</div>
+                                <div class="mini-timeline-label">Progress</div>
                                 <div class="mini-timeline">${miniTimelineHTML}</div>
                             </div>
                             <div class="sari-card-footer">
-                                <a href="#" class="details-btn view-details-btn">Details ansehen</a>
+                                <a href="#" class="details-btn view-details-btn">View Details</a>
                             </div>
                         </div>
                     `;
@@ -351,18 +360,18 @@
 
             function renderSariDetail(sari) {
                 const SARI_ID = sari.id;
-                const SUPPLIER_EMAIL = "lieferant@example.com";
+                const SUPPLIER_EMAIL = "supplier@example.com";
                 const AT_RISK_DAYS = 5; 
-                const startDate = new Date();
-                startDate.setDate(startDate.getDate() - sari.daysOpen);
+                const creationDate = new Date(sari.creationDate);
+                const daysOpen = Math.ceil((new Date() - creationDate) / (1000 * 60 * 60 * 24));
                 const currentStepIndex = sari.currentStepIndex;
                 const currentStepId = milestones[currentStepIndex].id;
                 
                 sariDetailView.innerHTML = `
                     <div id="info-modal" class="modal"><div class="modal-content"><div class="modal-header"><h3 id="modal-title"></h3><span class="modal-close-btn">&times;</span></div><div id="modal-body" class="modal-body"></div></div></div>
-                    <div id="five-why-modal" class="modal"><div class="modal-content"><div class="modal-header"><h3 id="five-why-title">5-Why Analyse</h3><span class="modal-close-btn">&times;</span></div><div class="modal-body"><label for="why-problem-statement">Problem Statement</label><textarea id="why-problem-statement" class="deliverable-input" rows="2"></textarea><div id="why-container"></div></div><div class="modal-footer"><button id="save-why-btn">Speichern & Schließen</button></div></div></div>
-                    <div class="header"><h1>Sari Governance Tool</h1><h2 id="sari-detail-title">${SARI_ID}</h2></div>
-                    <div class="project-health"><div class="kpi-card"><div class="kpi-title">Overall Status</div><div class="kpi-value" id="kpi-status"></div></div><div class="kpi-card"><div class="kpi-title">Days Open</div><div class="kpi-value">${sari.daysOpen}</div></div><div class="kpi-card"><div class="kpi-title">Current Step</div><div class="kpi-value">${milestones[currentStepIndex]?.name || 'N/A'}</div></div><div class="kpi-card"><div class="kpi-title">Next Milestone</div><div class="kpi-value" id="kpi-next-milestone"></div></div></div>
+                    <div id="five-why-modal" class="modal"><div class="modal-content"><div class="modal-header"><h3 id="five-why-title">5-Why Analysis</h3><span class="modal-close-btn">&times;</span></div><div class="modal-body"><label for="why-problem-statement">Problem Statement</label><textarea id="why-problem-statement" class="deliverable-input" rows="2"></textarea><div id="why-container"></div></div><div class="modal-footer"><button id="save-why-btn">Save & Close</button></div></div></div>
+                    <div class="header"><h1>SARI Governance Tool</h1><h2 id="sari-detail-title">${SARI_ID}</h2></div>
+                    <div class="project-health"><div class="kpi-card"><div class="kpi-title">Overall Status</div><div class="kpi-value" id="kpi-status"></div></div><div class="kpi-card"><div class="kpi-title">Days Open</div><div class="kpi-value">${daysOpen}</div></div><div class="kpi-card"><div class="kpi-title">Current Step</div><div class="kpi-value">${milestones[currentStepIndex]?.name || 'N/A'}</div></div><div class="kpi-card"><div class="kpi-title">Next Milestone</div><div class="kpi-value" id="kpi-next-milestone"></div></div></div>
                     <div class="steps-timeline"></div>
                     <div class="steps-details-container">
                         <!-- S-Steps will be rendered here -->
@@ -373,20 +382,21 @@
                     const el = document.createElement('div');
                     el.className = `step-milestone ${m.isGate ? 'gate' : ''}`;
                     el.id = `timeline-${m.id}`;
-                    const dueDate = new Date(startDate);
-                    dueDate.setDate(startDate.getDate() + m.due);
-                    el.innerHTML = `<div class="step-title">${m.name}</div><div class="step-date">${dueDate.toLocaleDateString('de-DE', { day:'2-digit', month:'2-digit' })}</div>`;
+                    const dueDate = new Date(creationDate);
+                    dueDate.setDate(creationDate.getDate() + m.due);
+                    el.innerHTML = `<div class="step-title">${m.name}</div><div class="step-date">${dueDate.toLocaleDateString('en-GB', { day:'2-digit', month:'2-digit' })}</div>`;
                     timelineContainer.appendChild(el);
                 });
                 sariDetailView.querySelector(`#timeline-${currentStepId}`).classList.add('current-step');
 
-                // For prototype purposes, let's just render S0 to S5
                 const stepsContainer = sariDetailView.querySelector('.steps-details-container');
                 stepsContainer.innerHTML = `
-                    <details class="s-step" open><summary data-info-title="S0: Ziel" data-info-text="Ziel ist die sofortige Eindämmung des Problems."><span>S0: Containment</span><button class="info-btn">?</button></summary><div class="deliverables-list"><div class="deliverable-item" data-due-days="1" data-id="s0-d1"><div class="deliverable-header"><span class="deliverable-title">Nachweis (Kundeninfo)</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s0-d1-status"></div></div></div><input type="date" class="deliverable-input"></div></div></details>
-                    <details class="s-step"><summary data-info-title="S1: Ziel" data-info-text="Ziel ist die Etablierung eines kompetenten Teams."><span>S1: Team</span><button class="info-btn">?</button></summary><div class="deliverables-list"><div class="deliverable-item" data-due-days="2" data-id="s1-d1"><div class="deliverable-header"><span class="deliverable-title">Team Charter (MFT)</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s1-d1-status"></div></div></div><textarea class="deliverable-input" style="height: 120px;" placeholder="Leader:&#10;Sponsor:&#10;..."></textarea></div></div></details>
-                    <details class="s-step" open><summary data-info-title="S2: Ziel" data-info-text="Ziel ist die faktenbasierte Problembeschreibung."><span>S2: Evidence Hub</span><button class="info-btn">?</button></summary><div class="deliverables-list"><div class="deliverable-item" data-due-days="5" data-id="s2-d2"><div class="deliverable-header"><span class="deliverable-title">Issue Description</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s2-d2-status"></div></div></div><textarea id="issue-description-input" class="deliverable-input" style="height: 100px;"></textarea><div class="suggestion-box" id="suggestion-output">-</div></div></div></details>
-                    <details class="s-step" open><summary data-info-title="S4: Ziel" data-info-text="Ziel ist die systematische Ursachenanalyse."><span>S4: RCA Cockpit</span><button class="info-btn">?</button></summary><div class="deliverables-list"><div class="deliverable-item" data-due-days="20" data-id="s4-d1"><div class="deliverable-header"><span class="deliverable-title">RC 1: Occurrence</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s4-d1-status"></div></div></div><input id="rc1-input" class="deliverable-input" readonly><button class="analyze-btn" data-rc-target="rc1-input" data-rc-title="5-Why: RC 1">5-Why</button></div><div class="deliverable-item" data-due-days="20" data-id="s4-d2"><div class="deliverable-header"><span class="deliverable-title">RC 2: Non-Detection</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s4-d2-status"></div></div></div><input id="rc2-input" class="deliverable-input" readonly><button class="analyze-btn" data-rc-target="rc2-input" data-rc-title="5-Why: RC 2">5-Why</button></div></div></details>
+                    <details class="s-step" open><summary data-info-title="S0: Objective" data-info-text="The objective is to immediately contain the problem to protect the customer and provide transparent initial information. Speed is the critical factor here."><div class="summary-controls"><a href="#" class="reminder-btn" style="display: block;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a><button class="info-btn">?</button></div><span>S0: Containment</span></summary><div class="deliverables-list"><div class="deliverable-item" data-due-days="1" data-id="s0-d1"><div class="deliverable-header"><span class="deliverable-title">Customer Notification</span><div class="header-controls"><button class="info-btn" data-info-title="Customer Notification Requirement" data-info-text="According to the Maturity Grid (Benchmark), the customer must be informed within 1 day. This is a critical KPI.">?</button><div class="status-light" id="s0-d1-status"></div></div></div><input type="date" class="deliverable-input"></div></div></details>
+                    <details class="s-step"><summary data-info-title="S1: Objective" data-info-text="Establish a competent, cross-functional team (MFT) with a clear management mandate ('Sponsor')."><div><a href="#" class="reminder-btn" style="display: block;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a><button class="info-btn">?</button></div><span>S1: Team</span></summary><div class="deliverables-list"><div class="deliverable-item" data-due-days="2" data-id="s1-d1"><div class="deliverable-header"><span class="deliverable-title">Team Charter (MFT)</span><div class="header-controls"><button class="info-btn" data-info-title="MFT Composition" data-info-text="Mandatory roles: Leader, Sponsor, Problem Owner, Operations.">?</button><div class="status-light" id="s1-d1-status"></div></div></div><textarea class="deliverable-input" style="height: 120px;" placeholder="Leader:&#10;Sponsor:&#10;..."></textarea></div></div></details>
+                    <details class="s-step" open><summary data-info-title="S2: Objective" data-info-text="Create an unambiguous, fact-based problem description. Gather hard evidence ('Go Look See')."><div><a href="#" class="reminder-btn" style="display: block;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a><button class="info-btn">?</button></div><span>S2: Evidence Hub</span></summary><div class="deliverables-list"><div class="deliverable-item" data-due-days="7" data-id="s2-d2"><div class="deliverable-header"><span class="deliverable-title">Issue Description</span><div class="header-controls"><button class="info-btn" data-info-title="Issue Description Requirement" data-info-text="Describe the problem precisely.">?</button><div class="status-light" id="s2-d2-status"></div></div></div><textarea id="issue-description-input" class="deliverable-input" style="height: 100px;"></textarea><div class="suggestion-box" id="suggestion-output">-</div></div></div></details>
+                    <details class="s-step"><summary data-info-title="S3: Objective" data-info-text="Prove that the immediate containment actions are 100% effective."><div><a href="#" class="reminder-btn" style="display: block;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a><button class="info-btn">?</button></div><span>S3: Validate Containment</span></summary><div class="deliverables-list"></div></details>
+                    <details class="s-step" open><summary data-info-title="S4: Objective" data-info-text="Systematically identify all cause levels: Occurrence, Non-Detection, and Systemic."><div><a href="#" class="reminder-btn" style="display: block;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a><button class="info-btn">?</button></div><span>S4: RCA Cockpit</span></summary><div class="deliverables-list"><div class="deliverable-item" data-due-days="45" data-id="s4-d0"><div class="deliverable-header"><span class="deliverable-title">Ishikawa Diagram</span><div class="header-controls"><button class="info-btn" data-info-title="Ishikawa Requirement" data-info-text="Brainstorm all potential causes using the Ishikawa (Fishbone) diagram to structure your analysis.">?</button><div class="status-light" id="s4-d0-status"></div></div></div><div class="ishikawa-diagram"><div class="ishikawa-bone"><h4>Man</h4><textarea></textarea></div><div class="ishikawa-bone"><h4>Machine</h4><textarea></textarea></div><div class="ishikawa-bone"><h4>Material</h4><textarea></textarea></div><div class="ishikawa-bone"><h4>Method</h4><textarea></textarea></div><div class="ishikawa-bone"><h4>Management</h4><textarea></textarea></div><div class="ishikawa-bone"><h4>Milieu</h4><textarea></textarea></div></div></div><div class="deliverable-item" data-due-days="45" data-id="s4-d1"><div class="deliverable-header"><span class="deliverable-title">RC 1: Occurrence</span><div class="header-controls"><button class="info-btn" data-info-title="Occurrence Root Cause" data-info-text="Path 1: Why did the failure *OCCUR*?">?</button><div class="status-light" id="s4-d1-status"></div></div></div><input id="rc1-input" class="deliverable-input" readonly><button class="analyze-btn" data-rc-target="rc1-input" data-rc-title="5-Why: RC 1">5-Why</button></div><div class="deliverable-item" data-due-days="45" data-id="s4-d2"><div class="deliverable-header"><span class="deliverable-title">RC 2: Non-Detection</span><div class="header-controls"><button class="info-btn" data-info-title="Non-Detection Root Cause" data-info-text="Path 2: Why was the failure *NOT DETECTED*?">?</button><div class="status-light" id="s4-d2-status"></div></div></div><input id="rc2-input" class="deliverable-input" readonly><button class="analyze-btn" data-rc-target="rc2-input" data-rc-title="5-Why: RC 2">5-Why</button></div></div></details>
+                    <details class="s-step"><summary data-info-title="S5: Objective" data-info-text="Define effective corrective actions (PCAs) that address EVERY root cause identified in S4."><div><a href="#" class="reminder-btn" style="display: block;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a><button class="info-btn">?</button></div><span>S5: Define Actions</span></summary><div class="deliverables-list"><div class="deliverable-item" data-due-days="80" data-id="s5-d1"><div class="deliverable-header"><span class="deliverable-title">PCA Action Plan</span><div class="header-controls"><button class="info-btn" data-info-title="PCA Action Plan" data-info-text="The plan must be clearly divided into actions against 1) Occurrence, 2) Non-Detection, and 3) Systemic root causes.">?</button><div class="status-light" id="s5-d1-status"></div></div></div><div class="rca-pca-link"><div class="rc-title">Actions for RC 1 (Occurrence):</div><textarea class="deliverable-input" placeholder="PCA 1.1..."></textarea></div><div class="rca-pca-link"><div class="rc-title">Actions for RC 2 (Non-Detection):</div><textarea class="deliverable-input" placeholder="PCA 2.1..."></textarea></div></div></div></details>
                 `;
                 
                 let today = new Date();
@@ -397,8 +407,8 @@
                     const dueDays = parseInt(item.dataset.dueDays, 10);
                     if (isNaN(dueDays)) return;
 
-                    const dueDate = new Date(startDate);
-                    dueDate.setDate(startDate.getDate() + dueDays);
+                    const dueDate = new Date(creationDate);
+                    dueDate.setDate(creationDate.getDate() + dueDays);
                     const diffDays = Math.ceil((dueDate - today) / (1000 * 3600 * 24));
                     
                     let currentStatus = 'green';
@@ -420,7 +430,6 @@
                 kpiStatus.className = `kpi-value ${overallStatus}`;
                 sariDetailView.querySelector('#kpi-next-milestone').textContent = nextMilestone.name;
                 
-                // Re-bind modal events for the new detail view content
                 bindModalEvents(sariDetailView);
             }
 
