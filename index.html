@@ -26,6 +26,11 @@
             padding: 0;
             color: var(--text-dark);
         }
+        
+        #app-wrapper {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
 
         .main-header {
             background: #fff;
@@ -34,6 +39,9 @@
             display: flex;
             align-items: center;
             box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .dashboard-btn {
@@ -59,7 +67,7 @@
         #dashboard-view h1 { color: var(--text-dark); margin-top: 0; }
         .sari-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
             gap: 24px;
         }
         .sari-card {
@@ -111,14 +119,14 @@
             height: 10px;
             border-radius: 5px;
             overflow: hidden;
+            background-color: var(--gate-grey);
         }
         .mini-timeline-segment {
-            flex-grow: 1;
+            flex-basis: 11.11%; /* 9 steps */
             transition: background-color 0.3s;
         }
         .mini-timeline-segment.completed { background-color: var(--status-green); }
         .mini-timeline-segment.current { background-color: var(--airbus-blue); }
-        .mini-timeline-segment.future { background-color: var(--gate-grey); }
         .mini-timeline-segment.overdue { background-color: var(--status-red); }
 
 
@@ -137,9 +145,7 @@
         .header h2 { margin: 5px 0 0 0; color: var(--text-light); font-weight: 400; }
 
         .project-health { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-bottom: 24px; padding: 16px; background: #fff; border-radius: 8px; box-shadow: var(--shadow-md); }
-        .kpi-card { text-align: center; padding: 8px; }
-        .kpi-card .kpi-title { font-size: 0.9rem; color: var(--text-light); }
-        .kpi-card .kpi-value { font-size: 1.5rem; font-weight: 600; color: var(--airbus-blue); margin-top: 4px; }
+        /* .kpi-card is shared */
         .kpi-card .kpi-value.red { color: var(--status-red); }
         .kpi-card .kpi-value.orange { color: var(--status-orange); }
         .kpi-card .kpi-value.green { color: var(--status-green); }
@@ -221,6 +227,7 @@
     </style>
 </head>
 <body>
+<div id="app-wrapper">
     <header class="main-header">
         <button id="nav-dashboard-btn" class="dashboard-btn">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
@@ -233,247 +240,196 @@
         <div id="dashboard-view">
             <h1>Meine SARI Fälle</h1>
             <div class="sari-grid">
-                <!-- SARI Card 1: At Risk -->
-                <div class="sari-card" data-sari-id="SARI SE-25.XXXX">
-                    <div class="sari-card-content">
-                        <div class="sari-card-header">
-                            <div>
-                                <div class="sari-id">SARI SE-25.XXXX</div>
-                                <h3 class="sari-title">FOD in APU compartment</h3>
-                            </div>
-                            <span class="sari-level-badge l2">L2</span>
-                        </div>
-                        <div class="sari-card-kpis">
-                            <div class="kpi-card"><div class="kpi-title">Current Step</div><div class="kpi-value">S2</div></div>
-                            <div class="kpi-card"><div class="kpi-title">Days Open</div><div class="kpi-value">1</div></div>
-                            <div class="kpi-card"><div class="kpi-title">Status</div><div class="kpi-value" style="color:var(--status-orange)">At Risk</div></div>
-                            <div class="kpi-card"><div class="kpi-title">SIM</div><div class="kpi-value">Max Mustermann</div></div>
-                        </div>
-                        <div class="mini-timeline-container">
-                            <div class="mini-timeline-label">Fortschritt</div>
-                            <div class="mini-timeline">
-                                <div class="mini-timeline-segment completed" title="S0"></div>
-                                <div class="mini-timeline-segment completed" title="S1"></div>
-                                <div class="mini-timeline-segment current" title="S2"></div>
-                                <div class="mini-timeline-segment future" title="S3"></div>
-                                <div class="mini-timeline-segment future" title="S4"></div>
-                                <div class="mini-timeline-segment future" title="S5"></div>
-                                <div class="mini-timeline-segment future" title="S6"></div>
-                                <div class="mini-timeline-segment future" title="S7"></div>
-                                <div class="mini-timeline-segment future" title="S8"></div>
-                            </div>
-                        </div>
-                        <div class="sari-card-footer">
-                            <a href="#" class="details-btn view-details-btn">Details ansehen</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- SARI Card 2: On Time -->
-                <div class="sari-card" data-sari-id="SARI SE-25.YYYY">
-                     <div class="sari-card-content">
-                        <div class="sari-card-header">
-                            <div>
-                                <div class="sari-id">SARI SE-25.YYYY</div>
-                                <h3 class="sari-title">Incorrect torque on wing root</h3>
-                            </div>
-                            <span class="sari-level-badge l3">L3</span>
-                        </div>
-                        <div class="sari-card-kpis">
-                            <div class="kpi-card"><div class="kpi-title">Current Step</div><div class="kpi-value">S0</div></div>
-                            <div class="kpi-card"><div class="kpi-title">Days Open</div><div class="kpi-value">0</div></div>
-                            <div class="kpi-card"><div class="kpi-title">Status</div><div class="kpi-value" style="color:var(--status-green)">On Time</div></div>
-                             <div class="kpi-card"><div class="kpi-title">SIM</div><div class="kpi-value">Erika Mustermann</div></div>
-                        </div>
-                        <div class="mini-timeline-container">
-                            <div class="mini-timeline-label">Fortschritt</div>
-                            <div class="mini-timeline">
-                                <div class="mini-timeline-segment current" title="S0"></div>
-                                <div class="mini-timeline-segment future" title="S1"></div>
-                                <div class="mini-timeline-segment future" title="S2"></div>
-                                <div class="mini-timeline-segment future" title="S3"></div>
-                                <div class="mini-timeline-segment future" title="S4"></div>
-                                <div class="mini-timeline-segment future" title="S5"></div>
-                                <div class="mini-timeline-segment future" title="S6"></div>
-                                <div class="mini-timeline-segment future" title="S7"></div>
-                                <div class="mini-timeline-segment future" title="S8"></div>
-                            </div>
-                        </div>
-                        <div class="sari-card-footer">
-                             <a href="#" class="details-btn view-details-btn">Details ansehen</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- SARI Card 3: Late -->
-                <div class="sari-card" style="border-color: var(--status-red);">
-                    <div class="sari-card-content">
-                        <div class="sari-card-header">
-                            <div>
-                                <div class="sari-id">SARI SE-25.ZZZZ</div>
-                                <h3 class="sari-title">Corrosion on pylon fitting</h3>
-                            </div>
-                             <span class="sari-level-badge l1">L1</span>
-                        </div>
-                        <div class="sari-card-kpis">
-                            <div class="kpi-card"><div class="kpi-title">Current Step</div><div class="kpi-value">S4</div></div>
-                            <div class="kpi-card"><div class="kpi-title">Days Open</div><div class="kpi-value">25</div></div>
-                            <div class="kpi-card"><div class="kpi-title">Status</div><div class="kpi-value" style="color:var(--status-red)">Late</div></div>
-                            <div class="kpi-card"><div class="kpi-title">SIM</div><div class="kpi-value">John Doe</div></div>
-                        </div>
-                        <div class="mini-timeline-container">
-                            <div class="mini-timeline-label">Fortschritt</div>
-                            <div class="mini-timeline">
-                                <div class="mini-timeline-segment completed" title="S0"></div>
-                                <div class="mini-timeline-segment completed" title="S1"></div>
-                                <div class="mini-timeline-segment completed" title="S2"></div>
-                                <div class="mini-timeline-segment completed" title="S3"></div>
-                                <div class="mini-timeline-segment overdue" title="S4"></div>
-                                <div class="mini-timeline-segment future" title="S5"></div>
-                                <div class="mini-timeline-segment future" title="S6"></div>
-                                <div class="mini-timeline-segment future" title="S7"></div>
-                                <div class="mini-timeline-segment future" title="S8"></div>
-                            </div>
-                        </div>
-                        <div class="sari-card-footer">
-                            <a href="#" class="details-btn view-details-btn">Details ansehen</a>
-                        </div>
-                    </div>
-                </div>
+                <!-- SARI Cards will be dynamically inserted here -->
             </div>
         </div>
 
-        <!-- SARI Detail View (content remains the same, just wrapped) -->
+        <!-- SARI Detail View -->
         <div id="sari-detail-view">
-            <!-- All the previous detail view HTML -->
-            <!-- ... -->
+            <!-- Content will be injected here -->
         </div>
     </main>
-    
+</div>    
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // --- CONFIGURATION & VIEWS ---
+
+            // --- MOCK DATA ---
+            const milestones = [
+                { id: 's0', name: 'S0', due: 1 }, { id: 's1', name: 'S1', due: 2 }, { id: 's2', name: 'S2', due: 5 }, 
+                { id: 's3', name: 'S3', due: 7 }, { id: 's4', name: 'S4', due: 20 }, { id: 's5', name: 'S5', due: 30 }, 
+                { id: 'pp', name: 'PP', due: 40, isGate: true }, { id: 's6', name: 'S6', due: 90 }, 
+                { id: 'dryrun', name: 'Dry Run', due: 100, isGate: true }, { id: 's7', name: 'S7', due: 110 }, { id: 's8', name: 'S8', due: 120 }
+            ];
+
+            const sariData = [
+                { id: 'SARI SE-25.XXXX', title: 'FOD in APU compartment', level: 'l2', sim: 'Max Mustermann', daysOpen: 1, currentStepIndex: 2, overallStatus: 'orange' },
+                { id: 'SARI SE-25.YYYY', title: 'Incorrect torque on wing root', level: 'l3', sim: 'Erika Mustermann', daysOpen: 0, currentStepIndex: 0, overallStatus: 'green' },
+                { id: 'SARI SE-25.ZZZZ', title: 'Corrosion on pylon fitting', level: 'l1', sim: 'John Doe', daysOpen: 25, currentStepIndex: 4, overallStatus: 'red' }
+            ];
+            
+            // --- VIEWS & NAVIGATION ---
             const dashboardView = document.getElementById('dashboard-view');
             const sariDetailView = document.getElementById('sari-detail-view');
             
             const showDashboard = () => {
+                renderDashboard();
                 dashboardView.style.display = 'block';
                 sariDetailView.style.display = 'none';
             };
 
             const showSariDetail = (sariId) => {
-                // In a real app, you would load the data for this SARI ID.
-                // For this prototype, we just switch views.
-                document.querySelector('#sari-detail-view #sari-detail-title').textContent = sariId;
+                const sari = sariData.find(s => s.id === sariId);
+                renderSariDetail(sari);
                 dashboardView.style.display = 'none';
                 sariDetailView.style.display = 'block';
             };
             
             document.getElementById('nav-dashboard-btn').onclick = showDashboard;
-            document.querySelectorAll('.view-details-btn').forEach(btn => btn.onclick = (e) => {
-                e.preventDefault();
-                const sariId = e.target.closest('.sari-card').dataset.sariId;
-                showSariDetail(sariId);
-            });
+            
+            // --- RENDER FUNCTIONS ---
+            function renderDashboard() {
+                const grid = document.querySelector('#dashboard-view .sari-grid');
+                grid.innerHTML = ''; // Clear existing cards
+                
+                sariData.forEach(sari => {
+                    const card = document.createElement('div');
+                    card.className = 'sari-card';
+                    card.dataset.sariId = sari.id;
+                    if (sari.overallStatus === 'red') card.style.borderColor = 'var(--status-red)';
 
-            // --- DETAIL VIEW LOGIC (wrapped in a function for clarity) ---
-            function setupSariDetailView() {
-                const SARI_ID = "SARI SE-25.XXXX";
+                    const nextDueDate = new Date();
+                    const nextStep = milestones[sari.currentStepIndex];
+                    if(nextStep) {
+                        nextDueDate.setDate(nextDueDate.getDate() - sari.daysOpen + nextStep.due);
+                    }
+
+                    let miniTimelineHTML = '';
+                    milestones.forEach((m, index) => {
+                        if (m.isGate) return; // Don't show gates in mini timeline
+                        let statusClass = 'future';
+                        if (index < sari.currentStepIndex) statusClass = 'completed';
+                        else if (index === sari.currentStepIndex) {
+                            statusClass = sari.overallStatus === 'red' ? 'overdue' : 'current';
+                        }
+                        miniTimelineHTML += `<div class="mini-timeline-segment ${statusClass}" title="${m.name}"></div>`;
+                    });
+
+                    card.innerHTML = `
+                        <div class="sari-card-content">
+                            <div class="sari-card-header">
+                                <div>
+                                    <div class="sari-id">${sari.id}</div>
+                                    <h3 class="sari-title">${sari.title}</h3>
+                                </div>
+                                <span class="sari-level-badge ${sari.level}">${sari.level.toUpperCase()}</span>
+                            </div>
+                            <div class="sari-card-kpis">
+                                <div class="kpi-card"><div class="kpi-title">Current Step</div><div class="kpi-value">${milestones[sari.currentStepIndex]?.name || 'N/A'}</div></div>
+                                <div class="kpi-card"><div class="kpi-title">Days Open</div><div class="kpi-value">${sari.daysOpen}</div></div>
+                                <div class="kpi-card"><div class="kpi-title">Next Due</div><div class="kpi-value">${nextStep ? nextDueDate.toLocaleDateString('de-DE') : 'N/A'}</div></div>
+                                <div class="kpi-card"><div class="kpi-title">SIM</div><div class="kpi-value">${sari.sim}</div></div>
+                            </div>
+                            <div class="mini-timeline-container">
+                                <div class="mini-timeline-label">Fortschritt</div>
+                                <div class="mini-timeline">${miniTimelineHTML}</div>
+                            </div>
+                            <div class="sari-card-footer">
+                                <a href="#" class="details-btn view-details-btn">Details ansehen</a>
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+
+                document.querySelectorAll('.view-details-btn').forEach(btn => btn.onclick = (e) => {
+                    e.preventDefault();
+                    const sariId = e.target.closest('.sari-card').dataset.sariId;
+                    showSariDetail(sariId);
+                });
+            }
+
+            function renderSariDetail(sari) {
+                const SARI_ID = sari.id;
                 const SUPPLIER_EMAIL = "lieferant@example.com";
                 const AT_RISK_DAYS = 5; 
                 const startDate = new Date();
-                const currentStepId = 's2';
+                startDate.setDate(startDate.getDate() - sari.daysOpen);
+                const currentStepIndex = sari.currentStepIndex;
+                const currentStepId = milestones[currentStepIndex].id;
                 
-                const detailViewContainer = document.getElementById('sari-detail-view');
-                if (!detailViewContainer) return;
+                sariDetailView.innerHTML = `
+                    <div id="info-modal" class="modal"><div class="modal-content"><div class="modal-header"><h3 id="modal-title"></h3><span class="modal-close-btn">&times;</span></div><div id="modal-body" class="modal-body"></div></div></div>
+                    <div id="five-why-modal" class="modal"><div class="modal-content"><div class="modal-header"><h3 id="five-why-title">5-Why Analyse</h3><span class="modal-close-btn">&times;</span></div><div class="modal-body"><label for="why-problem-statement">Problem Statement</label><textarea id="why-problem-statement" class="deliverable-input" rows="2"></textarea><div id="why-container"></div></div><div class="modal-footer"><button id="save-why-btn">Speichern & Schließen</button></div></div></div>
+                    <div class="header"><h1>Sari Governance Tool</h1><h2 id="sari-detail-title">${SARI_ID}</h2></div>
+                    <div class="project-health"><div class="kpi-card"><div class="kpi-title">Overall Status</div><div class="kpi-value" id="kpi-status"></div></div><div class="kpi-card"><div class="kpi-title">Days Open</div><div class="kpi-value">${sari.daysOpen}</div></div><div class="kpi-card"><div class="kpi-title">Current Step</div><div class="kpi-value">${milestones[currentStepIndex]?.name || 'N/A'}</div></div><div class="kpi-card"><div class="kpi-title">Next Milestone</div><div class="kpi-value" id="kpi-next-milestone"></div></div></div>
+                    <div class="steps-timeline"></div>
+                    <div class="steps-details-container">
+                        <!-- S-Steps will be rendered here -->
+                    </div>`;
 
-                // Inject detail view HTML if it's not already there
-                if (!detailViewContainer.querySelector('.header')) {
-                    detailViewContainer.innerHTML = `
-                        <!-- All the HTML from the previous version's #sari-detail-view -->
-                        <div id="info-modal" class="modal"><div class="modal-content"><div class="modal-header"><h3 id="modal-title"></h3><span class="modal-close-btn">&times;</span></div><div id="modal-body" class="modal-body"></div></div></div>
-                        <div id="five-why-modal" class="modal"><div class="modal-content"><div class="modal-header"><h3 id="five-why-title">5-Why Analyse</h3><span class="modal-close-btn">&times;</span></div><div class="modal-body"><label for="why-problem-statement">Problem Statement</label><textarea id="why-problem-statement" class="deliverable-input" rows="2"></textarea><div id="why-container"></div></div><div class="modal-footer"><button id="save-why-btn">Speichern & Schließen</button></div></div></div>
-                        <div class="header"><h1>Sari Governance Tool</h1><h2 id="sari-detail-title">SARI SE-25.XXXX</h2></div>
-                        <div class="project-health"><div class="kpi-card"><div class="kpi-title">Overall Status</div><div class="kpi-value" id="kpi-status">On Time</div></div><div class="kpi-card"><div class="kpi-title">Days Open</div><div class="kpi-value" id="kpi-days-open">0</div></div><div class="kpi-card"><div class="kpi-title">Current Step</div><div class="kpi-value" id="kpi-current-step">S0</div></div><div class="kpi-card"><div class="kpi-title">Next Milestone</div><div class="kpi-value" id="kpi-next-milestone">S0 Due</div></div></div>
-                        <div class="steps-timeline"><div class="step-milestone" id="timeline-s0"><div class="step-title">S0</div><div class="step-date"></div></div><div class="step-milestone" id="timeline-s1"><div class="step-title">S1</div><div class="step-date"></div></div><div class="step-milestone" id="timeline-s2"><div class="step-title">S2</div><div class="step-date"></div></div><div class="step-milestone" id="timeline-s3"><div class="step-title">S3</div><div class="step-date"></div></div><div class="step-milestone" id="timeline-s4"><div class="step-title">S4</div><div class="step-date"></div></div><div class="step-milestone" id="timeline-s5"><div class="step-title">S5</div><div class="step-date"></div></div><div class="step-milestone gate" id="timeline-pp"><div class="step-title">PP</div><div class="step-date"></div></div><div class="step-milestone" id="timeline-s6"><div class="step-title">S6</div><div class="step-date"></div></div><div class="step-milestone gate" id="timeline-dryrun"><div class="step-title">Dry Run</div><div class="step-date"></div></div><div class="step-milestone" id="timeline-s7"><div class="step-title">S7</div><div class="step-date"></div></div><div class="step-milestone" id="timeline-s8"><div class="step-title">S8</div><div class="step-date"></div></div></div>
-                        <div class="steps-details-container">
-                            <details class="s-step" open><summary data-info-title="S0: Ziel" data-info-text="Ziel ist die sofortige Eindämmung des Problems, um den Kunden zu schützen, und eine transparente Erstinformation. Geschwindigkeit ist hier der entscheidende Faktor."><span>S0: Containment</span><button class="info-btn">?</button></summary><div class="deliverables-list"><div class="deliverable-item" data-due-days="1" data-id="s0-d1"><div class="deliverable-header"><span class="deliverable-title">Nachweis (Kundeninfo)</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s0-d1-status"></div></div></div><input type="date" class="deliverable-input"></div><div class="deliverable-item" data-due-days="1" data-id="s0-d2"><div class="deliverable-header"><span class="deliverable-title">Containment-Aktionsplan</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s0-d2-status"></div></div></div><input type="file" class="deliverable-input"></div></div></details>
-                            <details class="s-step"><summary data-info-title="S1: Ziel" data-info-text="Ziel ist die Etablierung eines kompetenten, funktionsübergreifenden Teams (MFT) mit klarem Management-Mandat ('Sponsor'), um eine effektive Untersuchung sicherzustellen."><span >S1: Team</span><button class="info-btn">?</button></summary><div class="deliverables-list"><div class="deliverable-item" data-due-days="2" data-id="s1-d1"><div class="deliverable-header"><span class="deliverable-title">Team Charter (MFT)</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s1-d1-status"></div></div></div><textarea class="deliverable-input" style="height: 120px;" placeholder="Leader:&#10;Sponsor:&#10;Problem Owner:&#10;Operations:"></textarea></div></div></details>
-                            <details class="s-step" open><summary data-info-title="S2: Ziel" data-info-text="Ziel ist es, eine unmissverständliche, faktenbasierte Problembeschreibung zu erstellen. Verlassen Sie die Ebene der Vermutungen und sammeln Sie harte Beweise ('Go Look See') und den vollständigen Kontext."><span>S2: Evidence Hub</span><button class="info-btn">?</button></summary><div class="deliverables-list"><div class="deliverable-item" data-due-days="5" data-id="s2-d1"><div class="deliverable-header"><span class="deliverable-title">Supply Chain Breakdown</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s2-d1-status"></div></div></div><div class="supply-chain-breakdown"><div class="sc-node">Tier 1</div><div class="sc-arrow">&rarr;</div><div class="sc-node">Airbus Plant</div><div class="sc-arrow">&rarr;</div><div class="sc-node">FAL</div></div></div><div class="deliverable-item" data-due-days="5" data-id="s2-d2"><div class="deliverable-header"><span class="deliverable-title">Issue Description</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s2-d2-status"></div></div></div><textarea id="issue-description-input" class="deliverable-input" style="height: 100px;" placeholder="z.B. FOD (Schraube) im Bereich... gefunden"></textarea><div class="suggestion-box" id="suggestion-output">Vorschlag M1750 Kriterium: -</div></div><div class="deliverable-item" data-due-days="5" data-id="s2-d3"><div class="deliverable-header"><span class="deliverable-title">Foto-/Videobeweis</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s2-d3-status"></div></div></div><input type="file" class="deliverable-input" id="image-upload" accept="image/*"><img id="image-preview" src="#" alt="Bildvorschau"/></div></div></details>
-                            <details class="s-step"><summary data-info-title="S3: Ziel" data-info-text="Ziel ist der *Beweis*, dass die in S0 definierten Sofortmaßnahmen zu 100% wirksam sind, bevor die eigentliche Ursachenanalyse beginnt."><span>S3: Validate Containment</span><button class="info-btn">?</button></summary><div class="deliverables-list"><div class="deliverable-item" data-due-days="7" data-id="s3-d1"><div class="deliverable-header"><span class="deliverable-title">Validierungsbericht</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s3-d1-status"></div></div></div><input type="file" class="deliverable-input"></div></div></details>
-                            <details class="s-step" open><summary data-info-title="S4: Ziel" data-info-text="Ziel ist die systematische und getrennte Identifikation aller Ursachenebenen: Wie ist es entstanden (Occurrence)? Warum wurde es nicht entdeckt (Non-Detection)? Und was im System hat beides zugelassen (Systemic)?"><span>S4: RCA Cockpit</span><button class="info-btn">?</button></summary><div class="deliverables-list"><div class="deliverable-item" data-due-days="20" data-id="s4-d1"><div class="deliverable-header"><span class="deliverable-title">RC 1: Occurrence</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s4-d1-status"></div></div></div><input id="rc1-input" class="deliverable-input" placeholder="Finale Ursache hier eintragen..." readonly><button class="analyze-btn" data-rc-target="rc1-input" data-rc-title="5-Why Analyse für RC 1: Occurrence">5-Why Analyse starten</button></div><div class="deliverable-item" data-due-days="20" data-id="s4-d2"><div class="deliverable-header"><span class="deliverable-title">RC 2: Non-Detection</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s4-d2-status"></div></div></div><input id="rc2-input" class="deliverable-input" placeholder="Finale Ursache hier eintragen..." readonly><button class="analyze-btn" data-rc-target="rc2-input" data-rc-title="5-Why Analyse für RC 2: Non-Detection">5-Why Analyse starten</button></div><div class="deliverable-item" data-due-days="20" data-id="s4-d3"><div class="deliverable-header"><span class="deliverable-title">RC 3: Systemic</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s4-d3-status"></div></div></div><input id="rc3-input" class="deliverable-input" placeholder="Finale Ursache hier eintragen..." readonly><button class="analyze-btn" data-rc-target="rc3-input" data-rc-title="5-Why Analyse für RC 3: Systemic">5-Why Analyse starten</button></div></div></details>
-                            <details class="s-step"><summary data-info-title="S5: Ziel" data-info-text="Ziel ist die Definition von wirksamen Korrekturmaßnahmen (PCAs), die JEDE in S4 identifizierte Ursachenebene adressieren."><span>S5: Define Actions</span><button class="info-btn">?</button></summary><div class="deliverables-list"><div class="deliverable-item" data-due-days="30" data-id="s5-d1"><div class="deliverable-header"><span class="deliverable-title">PCA-Aktionsplan</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s5-d1-status"></div></div></div><div class="rca-pca-link"><div class="rc-title">Maßnahmen für RC 1 (Occurrence):</div><textarea class="deliverable-input" placeholder="PCA 1.1..."></textarea></div><div class="rca-pca-link"><div class="rc-title">Maßnahmen für RC 2 (Non-Detection):</div><textarea class="deliverable-input" placeholder="PCA 2.1..."></textarea></div><div class="rca-pca-link"><div class="rc-title">Maßnahmen für RC 3 (Systemic):</div><textarea class="deliverable-input" placeholder="PCA 3.1..."></textarea></div></div></div></details>
-                        </div>
-                    `;
-                }
+                const timelineContainer = sariDetailView.querySelector('.steps-timeline');
+                milestones.forEach(m => {
+                    const el = document.createElement('div');
+                    el.className = `step-milestone ${m.isGate ? 'gate' : ''}`;
+                    el.id = `timeline-${m.id}`;
+                    const dueDate = new Date(startDate);
+                    dueDate.setDate(startDate.getDate() + m.due);
+                    el.innerHTML = `<div class="step-title">${m.name}</div><div class="step-date">${dueDate.toLocaleDateString('de-DE', { day:'2-digit', month:'2-digit' })}</div>`;
+                    timelineContainer.appendChild(el);
+                });
+                sariDetailView.querySelector(`#timeline-${currentStepId}`).classList.add('current-step');
 
-                detailViewContainer.querySelector(`#timeline-${currentStepId}`).classList.add('current-step');
-                detailViewContainer.querySelector('#kpi-current-step').textContent = currentStepId.toUpperCase();
-                detailViewContainer.querySelector('#kpi-days-open').textContent = 1;
+                // For prototype purposes, let's just render S0 to S5
+                const stepsContainer = sariDetailView.querySelector('.steps-details-container');
+                stepsContainer.innerHTML = `
+                    <details class="s-step" open><summary data-info-title="S0: Ziel" data-info-text="Ziel ist die sofortige Eindämmung des Problems."><span>S0: Containment</span><button class="info-btn">?</button></summary><div class="deliverables-list"><div class="deliverable-item" data-due-days="1" data-id="s0-d1"><div class="deliverable-header"><span class="deliverable-title">Nachweis (Kundeninfo)</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s0-d1-status"></div></div></div><input type="date" class="deliverable-input"></div></div></details>
+                    <details class="s-step"><summary data-info-title="S1: Ziel" data-info-text="Ziel ist die Etablierung eines kompetenten Teams."><span>S1: Team</span><button class="info-btn">?</button></summary><div class="deliverables-list"><div class="deliverable-item" data-due-days="2" data-id="s1-d1"><div class="deliverable-header"><span class="deliverable-title">Team Charter (MFT)</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s1-d1-status"></div></div></div><textarea class="deliverable-input" style="height: 120px;" placeholder="Leader:&#10;Sponsor:&#10;..."></textarea></div></div></details>
+                    <details class="s-step" open><summary data-info-title="S2: Ziel" data-info-text="Ziel ist die faktenbasierte Problembeschreibung."><span>S2: Evidence Hub</span><button class="info-btn">?</button></summary><div class="deliverables-list"><div class="deliverable-item" data-due-days="5" data-id="s2-d2"><div class="deliverable-header"><span class="deliverable-title">Issue Description</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s2-d2-status"></div></div></div><textarea id="issue-description-input" class="deliverable-input" style="height: 100px;"></textarea><div class="suggestion-box" id="suggestion-output">-</div></div></div></details>
+                    <details class="s-step" open><summary data-info-title="S4: Ziel" data-info-text="Ziel ist die systematische Ursachenanalyse."><span>S4: RCA Cockpit</span><button class="info-btn">?</button></summary><div class="deliverables-list"><div class="deliverable-item" data-due-days="20" data-id="s4-d1"><div class="deliverable-header"><span class="deliverable-title">RC 1: Occurrence</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s4-d1-status"></div></div></div><input id="rc1-input" class="deliverable-input" readonly><button class="analyze-btn" data-rc-target="rc1-input" data-rc-title="5-Why: RC 1">5-Why</button></div><div class="deliverable-item" data-due-days="20" data-id="s4-d2"><div class="deliverable-header"><span class="deliverable-title">RC 2: Non-Detection</span><div class="header-controls"><button class="info-btn">?</button><div class="status-light" id="s4-d2-status"></div></div></div><input id="rc2-input" class="deliverable-input" readonly><button class="analyze-btn" data-rc-target="rc2-input" data-rc-title="5-Why: RC 2">5-Why</button></div></div></details>
+                `;
                 
+                let today = new Date();
                 let overallStatus = 'green';
                 let nextMilestone = { name: 'N/A', days: Infinity };
 
-                milestones.forEach(m => {
-                    const el = detailViewContainer.querySelector(`#timeline-${m.id}`);
-                    if(el) {
-                        const dueDate = new Date(startDate);
-                        dueDate.setDate(startDate.getDate() + m.due);
-                        el.querySelector('.step-date').textContent = `${dueDate.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })}`;
-                    }
-                });
-                
-                detailViewContainer.querySelectorAll('.deliverable-item').forEach(item => {
+                sariDetailView.querySelectorAll('.deliverable-item').forEach(item => {
                     const dueDays = parseInt(item.dataset.dueDays, 10);
                     if (isNaN(dueDays)) return;
 
                     const dueDate = new Date(startDate);
                     dueDate.setDate(startDate.getDate() + dueDays);
-                    const diffDays = dueDays;
+                    const diffDays = Math.ceil((dueDate - today) / (1000 * 3600 * 24));
                     
                     let currentStatus = 'green';
                     if (diffDays < 0) currentStatus = 'red';
                     else if (diffDays <= AT_RISK_DAYS) currentStatus = 'orange';
 
-                    const statusLight = detailViewContainer.querySelector(`#${item.dataset.id}-status`);
-                    if (statusLight) {
-                        statusLight.className = 'status-light'; // reset
-                        statusLight.classList.add(currentStatus);
-                    }
+                    const statusLight = sariDetailView.querySelector(`#${item.dataset.id}-status`);
+                    if (statusLight) statusLight.classList.add(currentStatus);
                     
-                    const controls = item.querySelector('.header-controls');
-                    const existingReminder = controls.querySelector('.reminder-btn');
-                    if(existingReminder) existingReminder.remove();
-
-                    if ((currentStatus === 'orange' || currentStatus === 'red') && controls) {
-                        const reminderBtn = document.createElement('a');
-                        reminderBtn.className = 'reminder-btn';
-                        reminderBtn.title = 'Erinnerungs-Mail senden';
-                        reminderBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>`;
-                        const deliverableTitle = item.querySelector('.deliverable-title').textContent;
-                        const mailtoSubject = encodeURIComponent(`SARI ${SARI_ID}: Erinnerung für Deliverable '${deliverableTitle}'`);
-                        const mailtoBody = encodeURIComponent(`Sehr geehrte Damen und Herren,\n\ndies ist eine freundliche Erinnerung, dass das Deliverable "${deliverableTitle}" am ${dueDate.toLocaleDateString('de-DE')} fällig ist/war.\n\nMit freundlichen Grüßen`);
-                        reminderBtn.href = `mailto:${SUPPLIER_EMAIL}?subject=${mailtoSubject}&body=${mailtoBody}`;
-                        controls.insertBefore(reminderBtn, statusLight);
-                        reminderBtn.style.display = 'block';
-                    }
-
                     if (diffDays >= 0 && diffDays < nextMilestone.days) {
                         nextMilestone = { name: item.querySelector('.deliverable-title').textContent, days: diffDays };
                     }
-
                     if (currentStatus === 'red') overallStatus = 'red';
                     else if (currentStatus === 'orange' && overallStatus !== 'red') overallStatus = 'orange';
                 });
-            
-                const kpiStatus = detailViewContainer.querySelector('#kpi-status');
+                
+                const kpiStatus = sariDetailView.querySelector('#kpi-status');
                 kpiStatus.textContent = { green: 'On Time', orange: 'At Risk', red: 'Late' }[overallStatus];
                 kpiStatus.className = `kpi-value ${overallStatus}`;
-                detailViewContainer.querySelector('#kpi-next-milestone').textContent = nextMilestone.name;
+                sariDetailView.querySelector('#kpi-next-milestone').textContent = nextMilestone.name;
+                
+                // Re-bind modal events for the new detail view content
+                bindModalEvents(sariDetailView);
+            }
 
-                const infoModal = detailViewContainer.querySelector('#info-modal');
-                const whyModal = detailViewContainer.querySelector('#five-why-modal');
+            function bindModalEvents(container) {
+                 const infoModal = container.querySelector('#info-modal');
+                 const whyModal = container.querySelector('#five-why-modal');
+                 if(!infoModal || !whyModal) return;
 
-                detailViewContainer.querySelectorAll('.info-btn').forEach(button => {
+                container.querySelectorAll('.info-btn').forEach(button => {
                     button.onclick = (e) => {
                         e.preventDefault();
                         const source = e.target.closest('summary, .deliverable-item');
@@ -484,31 +440,31 @@
                 });
 
                 let activeWhyTarget = null;
-                detailViewContainer.querySelectorAll('.analyze-btn').forEach(button => {
+                container.querySelectorAll('.analyze-btn').forEach(button => {
                     button.onclick = (e) => {
-                        activeWhyTarget = detailViewContainer.querySelector(`#${e.target.dataset.rcTarget}`);
+                        activeWhyTarget = container.querySelector(`#${e.target.dataset.rcTarget}`);
                         whyModal.querySelector('#five-why-title').textContent = e.target.dataset.rcTitle;
                         whyModal.querySelector('#why-container').innerHTML = '';
-                        addWhyLevel(1);
+                        addWhyLevel(1, whyModal);
                         whyModal.style.display = "block";
                     }
                 });
-                
-                function addWhyLevel(level) {
-                    const container = whyModal.querySelector('#why-container');
+
+                function addWhyLevel(level, modal) {
+                    const container = modal.querySelector('#why-container');
                     const levelContainer = document.createElement('div');
                     levelContainer.className = 'why-level-container';
                     levelContainer.innerHTML = `<div class="why-level"><div class="why-level-content"><label>${level}. Why?</label><textarea rows="2"></textarea></div>${level < 5 ? `<button class="add-why-btn" data-level="${level + 1}">+ Why</button>` : ''}</div>`;
                     container.appendChild(levelContainer);
                     const nextBtn = container.querySelector(`button[data-level="${level + 1}"]`);
-                    if(nextBtn) {
+                    if (nextBtn) {
                         nextBtn.onclick = (e) => {
                             e.target.style.display = 'none';
-                            addWhyLevel(parseInt(e.target.dataset.level, 10));
+                            addWhyLevel(parseInt(e.target.dataset.level, 10), modal);
                         };
                     }
                 }
-            
+
                 whyModal.querySelector('#save-why-btn').onclick = () => {
                     const whyTextareas = whyModal.querySelectorAll('#why-container textarea');
                     if (whyTextareas.length > 0 && activeWhyTarget) {
@@ -516,42 +472,14 @@
                     }
                     whyModal.style.display = "none";
                 };
-            
+
                 [infoModal, whyModal].forEach(modal => {
                     modal.querySelector('.modal-close-btn').onclick = () => modal.style.display = "none";
                 });
-                window.onclick = (event) => { if (event.target.classList.contains('modal')) event.target.style.display = "none"; }
-
-                const issueDescriptionInput = detailViewContainer.querySelector('#issue-description-input');
-                if (issueDescriptionInput) {
-                    issueDescriptionInput.addEventListener('keyup', (e) => {
-                        const text = e.target.value.toLowerCase();
-                        const outputBox = detailViewContainer.querySelector('#suggestion-output');
-                        if (text.includes('fod')) {
-                            outputBox.textContent = "Vorschlag M1750: GEN-001 (Foreign Object Debris)";
-                        } else if (text.includes('torque')) {
-                            outputBox.textContent = "Vorschlag M1750: GEN-004 (Incorrect Assembly)";
-                        } else {
-                            outputBox.textContent = "Vorschlag M1750 Kriterium: -";
-                        }
-                    });
-                }
-                
-                const imageUpload = detailViewContainer.querySelector('#image-upload');
-                if(imageUpload) {
-                    imageUpload.onchange = evt => {
-                        const [file] = evt.target.files;
-                        if (file) {
-                            const preview = detailViewContainer.querySelector('#image-preview');
-                            preview.src = URL.createObjectURL(file);
-                            preview.style.display = 'block';
-                        }
-                    };
-                }
+                window.onclick = (event) => { if (event.target === infoModal || event.target === whyModal) event.target.style.display = "none"; }
             }
-            
-            // Initial setup
-            setupSariDetailView();
+
+            // Initial Load
             showDashboard();
         });
     </script>
